@@ -25,7 +25,7 @@ body {
 /* Sidebar Styles */
 .sidebar {
     width: 250px;
-    background-color: #333;
+    background-color: #9c1e1e;
     color: #fff;
     padding: 20px;
 }
@@ -41,7 +41,7 @@ body {
 }
 
 .menu a {
-    color: #fff;
+    color: #755eb4;
     display: block;
     padding: 5px 0;
 }
@@ -86,7 +86,7 @@ body {
 }
 
 .logout-btn:hover {
-    background-color: #555;
+    background-color: #56a1ed;
 }
 
 /* Content Area Styles */

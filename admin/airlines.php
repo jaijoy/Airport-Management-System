@@ -1,122 +1,309 @@
 <?php
 include("includes/base.php");
+include("includes/header.php");
+include "../config/dbcon.php";
+
+// Inserting data into the database
+// Function to sanitize input data
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+
+// Inserting data into the database
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
+    $airline_name = test_input($_POST["airline_name"]);
+    $airline_type = test_input($_POST["airline_type"]);
+
+    // Handle image upload
+    $targetDirectory = "uploads/"; // Directory to store uploaded images
+    $targetFile = $targetDirectory . basename($_FILES["airline_logo"]["name"]);
+    
+    if (move_uploaded_file($_FILES["airline_lo"]["tmp_name"], $targetFile)) {
+    // Check if file already exists
+    if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
+    }
+    }
+    // Check file size
+    if ($_FILES["airline_logo"]["size"] > 500000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+
+    // Allow only certain file formats
+    $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+    if (!in_array($imageFileType, $allowedTypes)) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }
+
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    } else {
+        if (move_uploaded_file($_FILES["airline_logo"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["airline_logo"]["name"]) . " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
+
+    // Check if the entry already exists
+    $check_query = "SELECT * FROM airline WHERE airline_name='$airline_name' AND airline_type='$airline_type'";
+    $check_result = mysqli_query($con, $check_query);
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "Error: The entry already exists in the database.";
+    } else {
+        $sql = "INSERT INTO airline (airline_name, airline_type, logo) VALUES ('$airline_name', '$airline_type', '$target_file')";
+
+        if (mysqli_query($con, $sql)) {
+            echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($con);
+        }
+    }
+}
+// Editing data in the database
+if(isset($_POST['airline_id'])) {
+    $airline_id = $_POST['airline_id'];
+    $airline_name = $_POST['airline_name'];
+    $airline_type = $_POST['airline_type'];
+
+    $update_sql = "UPDATE airline SET airline_name='$airline_name', airline_type='$airline_type' WHERE airline_id=$airline_id";
+
+    if (mysqli_query($con, $update_sql)) {
+        header('Location: ' . $_SERVER['PHP_SELF']);
+    } else {
+        echo "Error updating record: " . mysqli_error($con);
+    }
+}
+
+// Deleting data from the database
+if(isset($_GET['delete_id']) && !empty($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $delete_sql = "DELETE FROM airline WHERE airline_id = $delete_id";
+
+    if (mysqli_query($con, $delete_sql)) {
+        header('Location: ' . $_SERVER['PHP_SELF']);
+    } else {
+        echo "Error deleting record: " . mysqli_error($con);
+    }
+}
+
+
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
-         <header class="header">
-                <div class="user-profile">
-                    
-                </div>
-                <a href="logout.php" class="logout-btn">Logout</a>
-            </header>
-            
-            <!-- Content Area -->
-            <div class="content">
-
-
-
-
-                <!-- Your content goes here -->
-
+    <title>Airlines Form</title>
     <style>
-                        /* Your existing CSS styles here */
-                        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+        /* Add CSS for the pop-up form */
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
         }
 
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: #333;
+<?php
+
+    // Check if the entry already exists
+    $check_query = "SELECT * FROM airline WHERE airline_name='$airline_name' AND airline_type='$airline_type'";
+    $check_result = mysqli_query($con, $check_query);
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "Error: The entry already exists in the database.";
+    } else {
+        $sql = "INSERT INTO airline (airline_name, airline_type) VALUES ('$airline_name', '$airline_type')";
+
+        if (mysqli_query($con, $sql)) {
+            echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($con);
+        }
+    }
+
+// Editing data in the database
+if(isset($_POST['airline_id'])) {
+    $airline_id = $_POST['airline_id'];
+    $airline_name = $_POST['airline_name'];
+    $airline_type = $_POST['airline_type'];
+
+    $update_sql = "UPDATE airline SET airline_name='$airline_name', airline_type='$airline_type' WHERE airline_id=$airline_id";
+
+    if (mysqli_query($con, $update_sql)) {
+        header('Location: ' . $_SERVER['PHP_SELF']);
+    } else {
+        echo "Error updating record: " . mysqli_error($con);
+    }
+}
+
+// Deleting data from the database
+if(isset($_GET['delete_id']) && !empty($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $delete_sql = "DELETE FROM airline WHERE airline_id = $delete_id";
+
+    if (mysqli_query($con, $delete_sql)) {
+        header('Location: ' . $_SERVER['PHP_SELF']);
+    } else {
+        echo "Error deleting record: " . mysqli_error($con);
+    }
+}
+
+
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Airlines Form</title>
+    <style>
+        /* Add CSS for the pop-up form */
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .form-container {
+            background-color: #fefefe;
+            padding: 20px;
+            width: 300px;
+            margin: auto;
         }
 
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 43px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        .form-container {
+            background-color: #fefefe;
+            padding: 20px;
+            width: 300px;
         }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #555;
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-left: 20px;
         }
 
-        input[type="text"], input[type="file"] {
-            width: 100%;
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
             padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+            text-align: left;
         }
 
-        input[type="file"] {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
+        th {
+            background-color: #4CAF50;
+            color: white;
         }
 
-        input[type="submit"] {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
 
-        input[type="submit"]:hover {
-            background-color: #555;
+        tr:hover {
+            background-color: #ddd;
         }
     </style>
- </head>
- <body>
-                    <h1>Airline Form</h1>
-                    <form action="../functions/f_airline.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
-                        <label for="airlineName">Airline Name:</label>
-                        <input type="text" id="airlineName" name="airlineName" required minlength="3">
-                        
-                        <label for="airlineImage">Airline Image:</label>
-                        <input type="file" id="airlineImage" name="img" accept="image/*" required>
-                        
-                        <input type="submit" value="Add Airline" name="abtn">
-                    </form>
+</head>
+<body>
 
-                    <script>
-                        function validateForm() {
-                            var airlineName = document.getElementById("airlineName").value;
-                            var airlineImage = document.getElementById("airlineImage").value;
-                            
-                            if (airlineName.length < 3) {
-                                alert("Airline Name must be at least 3 characters.");
-                                return false;
-                            }
+<h2>Add Airlines </h2>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+    Airline Name: <input type="text" name="airline_name" required>
+    <br><br>
+    Airline Type:
+    <select name="airline_type">
+        <option value="Cargo Airline">Cargo Airline</option>
+        
+        <option value="Domestic Airline">Domestic Airline</option>
+    </select>
+    <br><br>
+    Airline Logo:
+     <input type="file" name="airline_logo" accept="image/*">
 
-                            // Check if an image is selected
-                            if (airlineImage === "") {
-                                alert("Please select an image for the airline.");
-                                return false;
-                            }
+    <br><br>
+    <input type="submit" name="submit" value="Add">
+</form>
 
-                            return true; // Form is valid and can be submitted
-                        }
-                    </script>
+<h2>Airlines List</h2>
+<table border="1">
+    <tr>
+        <th>SI No</th>
+        <th>Airline Name</th>
+        <th>Airline Type</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <?php
+    $result = mysqli_query($con, "SELECT * FROM airline");
+    $counter = 1;
+    while ($row = mysqli_fetch_array($result)) {
+        echo "<tr>";
+        echo "<td>" . $counter . "</td>";
+        echo "<td>" . $row['airline_name'] . "</td>";
+        echo "<td>" . $row['airline_type'] . "</td>";
+        echo "<td><a href='javascript:void(0)' onclick='openEditForm(" . $row["airline_id"] . ", \"" . $row["airline_name"] . "\", \"" . $row["airline_type"] . "\")'>Edit</a></td>";
+        echo "<td><a href='?delete_id=".$row['airline_id']."'>Delete</a></td>";
+        echo "</tr>";
+        $counter++;
+    }
+    ?>
+</table>
 
+<div class="form-popup" id="editForm">
+    <div class="form-container">
+        <h2>Edit Airlines</h2>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <input type="hidden" name="airline_id" id="airline_id" value="">
+            Airline Name: <input type="text" name="airline_name" id="airline_name" required>
+            <br><br>
+            Airline Type:
+            <select name="airline_type" id="airline_type">
+                <option value="Cargo Airline">Cargo Airline</option>
+                <option value="Domestic Airline">Domestic Airline</option>
+            </select>
+            <br><br>
+            Airline Logo: <input type="file" name="airline_logo" accept="image/*">
 
-            </div>
-                
-        </main>
-        </div>
-    </body>
-    </html>
+            <br><br>
+            
+            <input type="submit" name="update" value="Update">
+            <button type="button" onclick="closeEditForm()">Close</button>
+        </form>
+    </div>
+</div>
 
+<script>
+    function openEditForm(id, name, type) {
+        document.getElementById("editForm").style.display = "block";
+        document.getElementById("airline_id").value = id;
+        document.getElementById("airline_name").value = name;
+        document.getElementById("airline_type").value = type;
+    }
 
-    
+    function closeEditForm() {
+        document.getElementById("editForm").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
