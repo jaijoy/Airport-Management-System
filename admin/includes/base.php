@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+<?php ob_start(); ?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,11 +103,16 @@ session_start();
             padding: 20px;
             overflow: auto;
         }
-
+    
     </style>
 </head>
 <body>
-    
+<script>
+        function showStopDetails() {
+            var stopDetails = document.getElementById("stopDetails");
+            stopDetails.style.display = "block";
+        }
+</script>
     <div class="admin-panel">
     
             
@@ -121,19 +124,28 @@ session_start();
                 <li><a href="index.php">Home</a></li>
                 <li><a href="#">Booked</a></li>
 
-                <li><a href="#">Flight Schedule</a></li>
-                
-                <li><a href="one_stop.php">One Stop Deatails</a></li>
-                <li><a href="seat.php">Seat Deatails</a></li>
+                <li><a href="schedule_view.php">Flight Schedule</a></li>
+                <li><a href="stop.php">Stop Deatails</a></li>
+                  <!--          
+                <div class="dropdown">
+                <button class="dropbtn"><a href="one_stop.php">Stop Details</a></button>
+                <div class="dropdown-content">
+                 Add your categories here as list items 
+                    <a href="one_stop.php">One Stop</a>
+                    <a href="Two_stop.php">Two Stop</a>
+                    <a href="Three_stop.php">Three Stop</a>
+                    <a href="Four-stop.php">Four Stop</a>
+                    <a href="Non_stop.php">Non  Stop</a>
+                </div>
+                </div>
+    -->
+                <li><a href="seat_view.php">Seat Details</a></li>
+                <li><a href="flights.php">Flight Details</a></li>
                 <li><a href="flight_one.php">Add Flight</a></li>
-                
-
-                
                 <li><a href="airport.php">Airport</a></li>
                 <li><a href="Aircraft.php">Airbus</a></li>
                 <li><a href="airline.php">Airlines</a></li>
-                
-                <li><a href="#">Users</a></li>
+                <li><a href="users.php">Users</a></li>
                 
             </ul>
         </nav>
@@ -142,3 +154,6 @@ session_start();
         <main class="main-content">
             <!-- Header -->
    
+    </body>
+    </html>
+    <?php ob_end_flush(); ?> 

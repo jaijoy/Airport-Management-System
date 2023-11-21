@@ -1,226 +1,339 @@
 
 <?php
+session_start();
 include("includes/base.php");
 include "../config/dbcon.php";
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    echo $id;
+
+?>
+<html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <head>
+    <style>
+
+
+        input[type="text"]#searchInput {
+            width: 30%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button#searchButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button#searchButton:hover {
+            background-color: #45a049;
+        }
+
+        .bo{
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        
+        .edit-link{
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .edit-link:hover {
+            background-color: #2980b9;
+        }
+        button {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        th, td {
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                width: 100%;
+            }
+
+            th, td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th {
+                position: relative;
+            }
+
+            th:before {
+                content: "";
+                height: 20px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background-color: #4CAF50;
+            }
+            .enable-btn {
+                background-color: #4CAF50 !important;
+                color: white !important;
+            }
+
+            .disable-btn {
+                background-color: #e74c3c !important;
+                color: white !important;
+            }  
+        }
+
+    </style>
+        
+    </head>
+    <body class="bo">
+
+
+<?php
+
+    if (isset($_POST['enable_disable']) && isset($_POST['form_submitted'])) {
+        $airlineId = $_POST['enable_disable'];
+
+        // Toggle the status in the database
+        $updateStatusQuery = "UPDATE flight SET status = (1 - status) WHERE flight_id = $airlineId";
+
+        if (mysqli_query($con, $updateStatusQuery)) {
+            echo "Status updated successfully";
+        } else {
+            echo "Error updating status: " . mysqli_error($con);
+        }
+        unset($_SESSION['form_submitted']);
     
-}
+        
+    }
+
 ?>
 
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Flight Form</title>
-    <link rel="stylesheet" type="text/css" href="css/flights.css">
-</head>
-
-<body>
+ 
 
 
-    <div id="formModal" class="modal">
-        <div class="modal-content">
-            <span onclick="closeFormModal()" style="float: right; cursor: pointer;">&times;</span>
-            <div class="container">
-            <form action="#" method="post">
-                    
+<?php
+// Your database connection and other code...
 
-                        <div class="form-group">
-                            <label for="airbus_name">Airbus Name:</label>
-                            <select name="airbus_name" id="airbus_name">
-                                <?php
-
-                                if (isset($_GET['id'])) {
-                                    
-                                    $airline_id = $_GET['airline_id'];
-                                    $airbus_query = "SELECT airbus_id, airbus_name FROM airbus WHERE airline_id = '$id'";
-                                    $airbus_result = mysqli_query($con, $airbus_query);
-                                    if (mysqli_num_rows($airbus_result) > 0) {
-                                        $output = '';
-                                        while ($row = mysqli_fetch_array($airbus_result)) {
-                                            $output .= "<option value='" . $row['airbus_id'] . "'>" . $row['airbus_name'] . "</option>";
-                                        }
-                                        echo $output;
-                                    } else {
-                                        echo "No airbus found for this airline.";
-                                    }
-                                } else {
-                                    echo "Airline ID not set.";
-                                }
-                    
-                                
-                                
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="flight_name">Flight Name:</label>
-                            <input type="text" id="flight_names" name="Flight_name">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="departure_location">Departure Location:</label>
-                            <select name="departure_location" id="departure_location">
-                                <?php
-                                $airport_query = "SELECT * FROM airport";
-                                $airport_result = mysqli_query($con, $airport_query);
-                                while ($row = mysqli_fetch_array($airport_result)) {
-                                    echo "<option value='" . $row['airport_id'] . "'>" . $row['airport_location'] . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="arrival_location">Arrival Location:</label>
-                            <select name="arrival_location" id="arrival_location">
-                                <?php
-                                mysqli_data_seek($airport_result, 0);
-                                while ($row = mysqli_fetch_array($airport_result)) {
-                                    echo "<option value='" . $row['airport_id'] . "'>" . $row['airport_location'] . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="stop">Stop:</label>
-                            <select name="stop" id="stop">
-                                <option value="one_stop">One Stop</option>
-                                <option value="one_stop">Two Stop</option>
-                                <option value="one_stop">Three Stop</option>
-                                <option value="one_stop">Four Stop</option>
-                                <option value="non_stop">Non Stop</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="flight_service">Flight Service Type:</label>
-                            <select name="flight_service" id="flight_service">
-                                <option value="International">International</option>
-                                <option value="Cargo">Cargo</option>
-                                <option value="Domestic">Domestic</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="price">Price:</label>
-                            <input type="text" id="price" name="price">
-                        </div>
-
-                
-                        <input type="submit" value="Submit">
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <?php
+$select_query = "SELECT
+    flight.flight_id,
+    flight.flight_name,
+    airline.airline_name AS f_airline_name,
+    airbus.airbus_name AS f_airbus_name,
+    flight.f_departure,
+    flight.f_arrival,
+    flight.stop,
+    flight.flight_service,
+    flight.price,
+    flight.status
+FROM
+    flight
+JOIN
+    airline ON flight.airline_id = airline.airline_id
+JOIN
+    airbus ON flight.airbus_id = airbus.airbus_id
+JOIN
+    airport AS departure_airport ON flight.airport_id = departure_airport.airport_id
+JOIN
+    airport AS destination_airport ON flight.airport_id = destination_airport.airport_id
 
 
-include "../config/dbcon.php";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $flight_name = $_POST['Flight_name']; // Corrected to match the name attribute in the HTML form
-    $airline_id = $_POST['airline'];
-    $airbus_id = $_POST['airbus_name'];
-    $departure_location = $_POST['departure_location'];
-    $arrival_location = $_POST['arrival_location'];
-    $stop = $_POST['stop'];
-    $flight_service = $_POST['flight_service'];
-    $price = $_POST['price'];
-
-    $insert_query = "INSERT INTO flight (flight_name, f_airline_name, f_airbus_name, f_departure, f_arrival, airline_id, airport_id, airbus_id, stop, flight_service, price) VALUES ('$flight_name', (SELECT airline_name FROM airline WHERE airline_id = $airline_id), (SELECT airbus_name FROM airbus WHERE airbus_id = $airbus_id), (SELECT airport_location FROM airport WHERE airport_id = $departure_location), (SELECT airport_location FROM airport WHERE airport_id = $arrival_location), $airline_id, $departure_location, $airbus_id, '$stop', '$flight_service', $price)";
-
-    if (mysqli_query($con, $insert_query)) {
-        echo "New record created successfully";
-    } else {
-        echo "Error: " . $insert_query . "<br>" . mysqli_error($con);
-    }
-}
+WHERE
+    airline.status = 1 AND
+    airbus.status = 0 AND
+    departure_airport.status = 1 AND
+    destination_airport.status = 1";
 
 
 
-
-$select_query = "SELECT * FROM flight";
 $result = mysqli_query($con, $select_query);
 
 $serial_no = 1; // Initialize the serial number
 
+// Check if the query was successful
+if ($result) {
+    // Check if there are rows in the result
+    if (mysqli_num_rows($result) > 0) {
+        ?>
+        <h2>Flight Details</h2>
+
+        <div style="display: flex;">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for flight name or location...">
+        <button id="searchButton" onclick="searchTable()">
+            <i class="fas fa-search"></i>
+        </button>
+         </div>
+
+        <table border="1">
+            <tr>
+                <th>SI No</th>
+                <th>Airline Name</th>
+                <th>Airbus Name</th>
+                <th>Flight Name</th>
+                <th>Departure Location</th>
+                <th>Arrival Location</th>
+                <th>Stop</th>
+                <th>Flight Service</th>
+                <th>Price</th>
+                <th>Edit</th>
+                <th>Enable/Disable</th>
+            </tr>
+            <?php while ($row = mysqli_fetch_array($result)) { ?>
+                <tr>
+                    <td><?php echo $serial_no; ?></td>
+                    <td><?php echo $row['f_airline_name']; ?></td>
+                    <td><?php echo $row['f_airbus_name']; ?></td>
+                    <td><?php echo $row['flight_name']; ?></td>
+                    <td><?php echo $row['f_departure']; ?></td>
+                    <td><?php echo $row['f_arrival']; ?></td>
+                    <td><?php echo $row['stop']; ?></td>
+                    <td><?php echo $row['flight_service']; ?></td>
+                    <td><?php echo $row['price']; ?></td>
+                    <td><a href="flight_edit.php?flight_id=<?php echo $row['flight_id']; ?>"class="edit-link">Edit</a></td>
+                    <td>
+                    <form method='post'>
+                            <input type='hidden' name='form_submitted' value='1'>
+                            <button type='submit' name='enable_disable' value='<?php echo $row['flight_id']; ?>'
+                                class="<?php echo ($row['status'] == 1 ? 'enable-btn' : 'disable-btn'); ?>">
+                                <?php echo ($row['status'] == 1 ? 'Disable' : 'Enable'); ?>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <?php $serial_no++; // Increment the serial number in each iteration ?>
+            <?php } ?>
+        </table>
+        <?php
+    } else {
+        echo "No records found.";
+    }
+
+    // Free the result set
+    mysqli_free_result($result);
+} else {
+    // Handle the case where the query failed
+    echo "Error executing the query: " . mysqli_error($con);
+}
+
+// Close the database connection
+mysqli_close($con);
 ?>
 
-    <h2>Flight Details</h2>
 
-    <table>
-        <tr>
-            <th>SI No</th>
-            <th>Flight Name</th>
-            <th>Airline Name</th>
-            <th>Airbus Name</th>
-            <th>Departure Location</th>
-            <th>Arrival Location</th>
-            <th>Stop</th>
-            <th>Flight Service</th>
-            <th>Price</th>
-            <th>Edit</th> 
-            <th>Enable/Disable</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_array($result)) { ?>
-            <tr>
-                <td><?php echo $serial_no; ?></td>
-                <td><?php echo $row['flight_name']; ?></td>
-                <td><?php echo $row['f_airline_name']; ?></td>
-                <td><?php echo $row['f_airbus_name']; ?></td>
-                <td><?php echo $row['f_departure']; ?></td>
-                <td><?php echo $row['f_arrival']; ?></td>
-                <td><?php echo $row['stop']; ?></td>
-                <td><?php echo $row['flight_service']; ?></td>
-                <td><?php echo $row['price']; ?></td>
-                <td><a href="edit_flight.php?flight_id=<?php echo $row['flight_id']; ?>">Edit</a></td>
-                <td><button>Enable/Disable</button></td>
-            </tr>
-            <?php $serial_no++; // Increment the serial number in each iteration ?>
-        <?php } ?>
-    </table>
 
-    
-    <button onclick="openFormModal()">Add Flight</button>
-    
+<script>
+      // JavaScript function to perform search
+function searchTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.querySelector("table");
+    tr = table.getElementsByTagName("tr");
 
-    <script>
-        function openFormModal() {
-            document.getElementById("formModal").style.display = "block";
+    for (i = 0; i < tr.length; i++) {
+        // Change the indices based on your table structure
+        var tdAirbus = tr[i].getElementsByTagName("td")[2];
+        var tdFlight = tr[i].getElementsByTagName("td")[3];
+        var tdPrice = tr[i].getElementsByTagName("td")[8];
+        var tdStop = tr[i].getElementsByTagName("td")[6];
+        var tdAirline = tr[i].getElementsByTagName("td")[1];
+
+        if (tdAirbus || tdFlight || tdPrice || tdStop || tdAirline) {
+            var txtValueAirbus = tdAirbus.textContent || tdAirbus.innerText;
+            var txtValueFlight = tdFlight.textContent || tdFlight.innerText;
+            var txtValuePrice = tdPrice.textContent || tdPrice.innerText;
+            var txtValueStop = tdStop.textContent || tdStop.innerText;
+            var txtValueAirline = tdAirline.textContent || tdAirline.innerText;
+
+            // Check if any of the criteria match
+            if (
+                txtValueAirbus.toUpperCase().indexOf(filter) > -1 ||
+                txtValueFlight.toUpperCase().indexOf(filter) > -1 ||
+                txtValuePrice.toUpperCase().indexOf(filter) > -1 ||
+                txtValueStop.toUpperCase().indexOf(filter) > -1 ||
+                txtValueAirline.toUpperCase().indexOf(filter) > -1
+            ) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
         }
+    }
+}
 
-        function closeFormModal() {
-            document.getElementById("formModal").style.display = "none";
-        }
-
-        // Update the link to include the flight_id without refreshing the page
-        function editFlight(flightId) {
-            // Assuming you have an edit_flight.php page for editing flights
-            window.location.href = "edit_flight.php?flight_id=" + flightId;
-        }
-    </script>
+</script>
 
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

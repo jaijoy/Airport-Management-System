@@ -307,3 +307,72 @@ if(isset($_GET['delete_id']) && !empty($_GET['delete_id'])) {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+// Your PHP code for querying and displaying the table
+
+$select_query = "SELECT airbus.airbus_id, airline.airline_name, airbus.airbus_name, airbus.passenger_capacity, airbus.status FROM airbus JOIN airline ON airbus.airline_id = airline.airline_id";
+$result = mysqli_query($con, $select_query);
+
+if (mysqli_num_rows($result) > 0) {
+    echo "<table>
+    <tr>
+    <th>Si. No.</th>
+    <th>Airline Name</th>
+    <th>Airbus Name</th>
+    <th>Passenger Capacity</th>
+    <th>Edit</th>
+    <th>Enable/Disable</th>
+    </tr>";
+
+    $serial_no = 1;
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>" . $serial_no . "</td>";
+        echo "<td>" . $row['airline_name'] . "</td>";
+        echo "<td>" . $row['airbus_name'] . "</td>";
+        echo "<td>" . $row['passenger_capacity'] . "</td>";
+        if ($row["status"] == 1) {
+
+            $select_query1 = "update .........query";
+            $result1 = mysqli_query($con, $select_query);
+
+
+            echo "<td><button  class='edit-button-disabled' disabled>Edit</button></td>";
+            echo "<td><button>Disable</button></td>";
+        } else {
+            
+            echo "<td><button>Edit</button></td>";
+            echo "<td><button>Enalble</button></td>";
+        }
+    }
+}
+       
+
+mysqli_close($con);
+?>
+
+
+

@@ -1,6 +1,6 @@
 <?php
 include("includes/base.php");
-include("../admin_auth/admin_url_access.php");
+
 ?>
             
             

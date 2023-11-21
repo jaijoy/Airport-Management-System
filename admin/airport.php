@@ -7,7 +7,7 @@ include("includes/base.php");
 <html>
 
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,26 +36,29 @@ include("includes/base.php");
         }
 
         button {
-            background-color: #dd0ab8;
+            background-color: #1c4fa9;
+            /* Blue shade */
             color: white;
-            padding: 10px 15px;
-            margin-left: 40%;
+            padding: 12px 15px;
+            margin-left: 69%;
             margin-top: 40px;
-            margin-right: 40%;
+            margin-right: 10%;
             border: none;
             cursor: pointer;
             border-radius: 5px;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #305f9e;
+            /* Hover color in different blue shade */
         }
 
         table {
-            width: 50%;
+            width: 80%;
             border-collapse: collapse;
             margin-top: 20px;
             margin-left: 130px;
+            background-color: white;
         }
 
         table,
@@ -64,23 +67,29 @@ include("includes/base.php");
             border: 1px solid black;
         }
 
-        th,
-        td {
+        th{
             padding: 10px;
+            text-align: left; 
+        }
+        td {
+            padding: 1px;
             text-align: left;
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: #4d90e6;
+            /* Blue shade */
             color: white;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #d9edf7;
+            /* Light blue shade */
         }
 
         tr:hover {
-            background-color: #ddd;
+            background-color: #bcdff1;
+            /* Hover color in a different light blue shade */
         }
 
         input[type="text"] {
@@ -101,17 +110,20 @@ include("includes/base.php");
         }
 
         .status-button-enabled {
-            background-color: #4CAF50;
+            background-color: #4d90e6;
+            /* Blue shade */
             color: white;
         }
 
         .status-button-disabled {
-            background-color: #f44336;
+            background-color: #ff6666;
+            /* Light red shade */
             color: white;
         }
 
         .edit-button {
-            background-color: #2196F3;
+            background-color: #007acc;
+            /* Blue shade */
             color: white;
             padding: 10px 15px;
             margin: 10px;
@@ -128,7 +140,6 @@ include("includes/base.php");
             border: none;
             border-radius: 5px;
             cursor: not-allowed;
-
         }
 
         input[type="text"]#searchInput {
@@ -141,7 +152,8 @@ include("includes/base.php");
         }
 
         button#searchButton {
-            background-color: #4CAF50;
+            background-color: #1c4fa9;
+            /* Blue shade */
             color: white;
             padding: 10px 15px;
             margin: 10px;
@@ -151,39 +163,88 @@ include("includes/base.php");
         }
 
         button#searchButton:hover {
-            background-color: #45a049;
+            background-color: #305f9e;
+            /* Hover color in different blue shade */
+        }
+        .error-message{
+            color:red;
         }
     </style>
+
 </head>
 
 <body>
-<h1>Airport Deatails</h1>
-<div style="display: flex;">
+    <h1>Airport Deatails</h1>
+
+    <div style="display: flex;">
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for airport name or location...">
         <button id="searchButton" onclick="searchTable()">
             <i class="fas fa-search"></i>
         </button>
     </div>
 
+    <button onclick="openForm()"> +Add Airport</button>
+
     <div id="airportForm" class="form-popup">
         <div class="form-container">
-            <form action="airport.php" method="post">
+            <form action="airport.php" method="post" onsubmit="return submitAddForm()">
                 Airport Name:<br>
-                <input type="text" name="airport_name" required>
+                <input type="text" id="airport_name" name="airport_name" oninput="validateAirportName()" required>
+                <span id="airport_name_error" class="error-message"></span><br><br>
+
                 <br><br>
                 Airport Location:<br>
-                <input type="text" name="airport_location" required>
+                <input type="text" name="airport_location" id="airport_location" oninput="validateAirportLocation()" required>
+                <span id="airport_location_error" class="error-message"></span><br><br>
                 <br><br>
-                Terminal <br>
+                <!-- Terminal <br>
                 <input type="checkbox" name="airport_type[]" value="domestic"> Domestic<br>
                 <input type="checkbox" name="airport_type[]" value="international"> International<br>
                 <input type="checkbox" name="airport_type[]" value="cargo"> Cargo<br>
-                <br><br>
+                <br><br> -->
                 <button type="submit">Submit</button>
                 <button type="button" onclick="closeForm()">Close</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function validateAirportName() {
+            var airportNameInput = document.getElementById('airport_name');
+            var airportNameError = document.getElementById('airport_name_error');
+            var airportNameRegex =  /^[a-zA-Z\s]{3,}$/;
+
+
+            if (!airportNameRegex.test(airportNameInput.value)) {
+                airportNameError.textContent = "Airport Name must start with at least three alphabets";
+                return false;
+            } else {
+                airportNameError.textContent = "";
+                return true;
+            }
+        }
+
+        function validateAirportLocation() {
+        var airportLocationInput = document.getElementById('airport_location');
+        var airportLocationError = document.getElementById('airport_location_error');
+        var airportLocationRegex = /^[a-zA-Z\s]{3,}$/;
+
+        if (!airportLocationRegex.test(airportLocationInput.value)) {
+            airportLocationError.textContent = "Airport location must consist of at least three alphabets and spaces, without numbers";
+            return false;
+        } else {
+            airportLocationError.textContent = "";
+            return true;
+        }
+}
+
+
+        function submitAddForm() {
+            return validateAirportName() && validateAirportLocation();
+        }
+    </script>
+
+
 
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -191,37 +252,54 @@ include("includes/base.php");
             $airport_name = $_POST['airport_name'];
             $airport_location = $_POST['airport_location'];
 
-            if (!empty($_POST['airport_type'])) {
-                $airport_types = $_POST['airport_type'];
-                $types_string = implode(", ", $airport_types);
-                $sql = "INSERT INTO airport (airport_name, airport_location, terminal) VALUES ('$airport_name', '$airport_location', '$types_string')";
+            // Check if the airport with the same name and location already exists
+            $check_query = "SELECT * FROM airport WHERE airport_name='$airport_name' OR airport_location='$airport_location'";
+            $check_result = mysqli_query($con, $check_query);
 
-                if (mysqli_query($con, $sql)) {
-                    echo "New record created successfully";
-                } else {
-                    echo "Error: " . $sql . "<br>" . mysqli_error($con);
-                }
+            if (mysqli_num_rows($check_result) > 0) {
+                echo "Error: Airport with the same name and location already exists.";
             } else {
-                $sql = "INSERT INTO airport (airport_name, airport_location) VALUES ('$airport_name', '$airport_location')";
+                if (!empty($_POST['airport_type'])) {
+                    $airport_types = $_POST['airport_type'];
+                    $types_string = implode(", ", $airport_types);
+                    $sql = "INSERT INTO airport (airport_name, airport_location, terminal) VALUES ('$airport_name', '$airport_location', '$types_string')";
 
-                if (mysqli_query($con, $sql)) {
-                    echo "New record created successfully";
+                    if (mysqli_query($con, $sql)) {
+                        echo "New record created successfully";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                    }
                 } else {
-                    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                    $sql = "INSERT INTO airport (airport_name, airport_location) VALUES ('$airport_name', '$airport_location')";
+
+                    if (mysqli_query($con, $sql)) {
+                        echo "New record created successfully";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                    }
                 }
             }
-        } elseif (isset($_POST['edit_id']) && isset($_POST['edit_name']) && isset($_POST['edit_location']) && isset($_POST['edit_terminal'])) {
+
+        }
+        elseif (isset($_POST['edit_id']) && isset($_POST['edit_name']) && isset($_POST['edit_location'])) {
             $edit_id = $_POST['edit_id'];
             $edit_name = $_POST['edit_name'];
             $edit_location = $_POST['edit_location'];
-            $edit_terminal = implode(", ", $_POST['edit_terminal']);
 
-            $update_sql = "UPDATE airport SET airport_name='$edit_name', airport_location='$edit_location', terminal='$edit_terminal' WHERE airport_id=$edit_id";
+            // Check if the edited values are different from the existing values in the database
+            $check_query = "SELECT * FROM airport WHERE (airport_name='$edit_name' OR airport_location='$edit_location') AND airport_id <> '$edit_id'";
+            $check_result = mysqli_query($con, $check_query);
 
-            if (mysqli_query($con, $update_sql)) {
-                echo "Record updated successfully";
+            if (mysqli_num_rows($check_result) > 0) {
+                echo "Error: The edited values conflict with existing values in the database.";
             } else {
-                echo "Error updating record: " . mysqli_error($con);
+                $update_sql = "UPDATE airport SET airport_name='$edit_name', airport_location='$edit_location' WHERE airport_id=$edit_id";
+
+                if (mysqli_query($con, $update_sql)) {
+                    echo "Record updated successfully";
+                } else {
+                    echo "Error updating record: " . mysqli_error($con);
+                }
             }
         }
     }
@@ -230,14 +308,13 @@ include("includes/base.php");
     $result = mysqli_query($con, $sql);
     if (mysqli_num_rows($result) > 0) {
         echo "<table border='1'>";
-        echo "<tr><th>SI NO</th><th>Airport Name</th><th>Airport Location</th><th>Terminal</th><th>Edit</th><th>Status</th></tr>";
+        echo "<tr><th>SI NO</th><th>Airport Name</th><th>Airport Location</th><th>Edit</th><th>Status</th></tr>";
         $counter = 1;
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
             echo "<td>" . $counter . "</td>";
             echo "<td>" . $row["airport_name"] . "</td>";
             echo "<td>" . $row["airport_location"] . "</td>";
-            echo "<td>" . $row["terminal"] . "</td>";
             echo "<td>";
             if (isset($row["status"]) && $row["status"] == 1) { ?>
                 <button onclick='openEditForm(<?php echo $row["airport_id"]; ?>, "<?php echo $row["airport_name"]; ?>", "<?php echo $row["airport_location"]; ?>", "<?php echo $row["terminal"]; ?>")' class='edit-button'>Edit</button>
@@ -252,18 +329,18 @@ include("includes/base.php");
                     <button onclick='changeStatus(<?php echo $row["airport_id"]; ?>, 1, event)' class='status-button status-button-disabled'>Disabled</button>
                 <?php } ?>
             </td>
-            
+
             </tr>
-            <?php $counter++;
+    <?php $counter++;
         }
         echo "</table>";
     } else {
         echo "<p>No results</p>";
     }
-?>
-    <button onclick="openForm()" >Add Airport</button>
-    
-<?php
+    ?>
+
+
+    <?php
     if (isset($_GET['id']) && isset($_GET['status'])) {
         $id = $_GET['id'];
         $status = $_GET['status'];
@@ -281,26 +358,67 @@ include("includes/base.php");
 
     <div id="editForm" class="form-popup">
         <div class="form-container">
-            <form action="airport.php" method="post">
+            <form action="airport.php" method="post" onsubmit="return submitEditForm()">
                 <input type="hidden" id="edit_id" name="edit_id" value="">
                 Airport Name:<br>
-                <input type="text" id="edit_name" name="edit_name" required>
+                <input type="text" id="edit_name" name="edit_name" oninput="validateEditAirportName()"required><br>
+                <span id="edit_name_error" class="error-message"></span><br><br>
                 <br><br>
                 Airport Location:<br>
-                <input type="text" id="edit_location" name="edit_location" required>
+                <input type="text" id="edit_location" name="edit_location" oninput="validateEditAirportLocation()" required><br>
+                <span id="edit_location_error" class="error-message"></span><br><br>
                 <br><br>
-                Terminal:<br>
+                <!-- Terminal:<br>
                 <input type="checkbox" id="edit_terminal" name="edit_terminal[]" value="domestic"> Domestic<br>
                 <input type="checkbox" id="edit_terminal" name="edit_terminal[]" value="international"> International<br>
                 <input type="checkbox" id="edit_terminal" name="edit_terminal[]" value="cargo"> Cargo<br>
-                <br><br>
+                <br><br> -->
                 <button type="submit">Update</button>
                 <button type="button" onclick="closeEditForm()">Close</button>
             </form>
         </div>
     </div>
 
-    <script>
+
+
+
+<script>
+    function validateEditAirportName() {
+    var airportEditNameInput = document.getElementById('edit_name');
+    var airportNameError = document.getElementById('edit_name_error');
+    var airportNameRegex = /^[a-zA-Z\s]{3,}$/;
+
+    if (!airportNameRegex.test(airportEditNameInput.value)) {
+        airportNameError.textContent = "Airport Name must start alphabets";
+        return false;
+    } else {
+        airportNameError.textContent = "";
+        return true;
+            }
+        }
+
+        function validateEditAirportLocation() {
+            var airportLocationInput = document.getElementById('edit_location');
+            var airportLocationError = document.getElementById('edit_location_error');
+            var airportLocationRegex = /^[a-zA-Z\s]{3,}$/;
+
+            if (!airportLocationRegex.test(airportLocationInput.value)) {
+                airportLocationError.textContent = "Airport location must consist of alphabets.";
+                return false;
+            } else {
+                airportLocationError.textContent = "";
+                return true;
+            }
+        }
+
+        function submitEditForm() {
+            return validateEditAirportName() && validateEditAirportLocation();
+        }
+
+
+        function submitAddForm() {
+            return validateAirportName() && validateAirportLocation();
+        }
         function openForm() {
             document.getElementById("airportForm").style.display = "flex";
         }
@@ -335,7 +453,7 @@ include("includes/base.php");
             };
             xhttp.open("GET", 'airport.php?id=' + id + '&status=' + status, true);
             xhttp.send();
-}
+        }
 
         function closeEditForm() {
             document.getElementById("editForm").style.display = "none";
@@ -367,10 +485,3 @@ include("includes/base.php");
 </body>
 
 </html>
-
-
-
-
-
-
-

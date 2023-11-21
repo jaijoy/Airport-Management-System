@@ -1,4 +1,3 @@
-
 <?php
 include("includes/base.php");
 
@@ -30,7 +29,7 @@ if (isset($_POST["submit"])) {
             if (mysqli_query($con, $insert_sql)) {
                 //$errorMessage =  "New record created successfully";
             } else {
-               // $errorMessage =  "Error: " . $insert_sql . "<br>" . mysqli_error($con);
+                // $errorMessage =  "Error: " . $insert_sql . "<br>" . mysqli_error($con);
             }
         } else {
             //$errorMessage =  "Sorry, there was an error uploading your image.";
@@ -46,7 +45,7 @@ if (isset($_POST["update"])) {
     // Check if the new airline name is not already in the database
     $existing_airline = mysqli_query($con, "SELECT * FROM airline WHERE airline_name = '$airlineName' AND airline_id <> $airlineId");
     if (mysqli_num_rows($existing_airline) > 0) {
-        $errorMessage="Error: An airline with the same name already exists.";
+        $errorMessage = "Error: An airline with the same name already exists.";
     } else {
         // Update data in the database
         $update_sql = "UPDATE airline SET airline_name='$airlineName' WHERE airline_id=$airlineId";
@@ -85,30 +84,34 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
     if (mysqli_query($con, $update_status_sql)) {
         //echo "Status updated successfully";
     } else {
-       // echo "Error updating status: " . mysqli_error($con);
+        // echo "Error updating status: " . mysqli_error($con);
     }
 }
 ?>
 <html>
+
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
         .heading {
             text-align: center;
             margin-top: 20px;
             color: #333;
             font-size: 50px;
             font-weight: 600;
-            background-image: radial-gradient(#553c9a, #ee4b2b);;
+            background-image: radial-gradient(#553c9a, #ee4b2b);
+            ;
             color: transparent;
             background-clip: text;
             -webkit-background-clip: text;
         }
-        h2{
+
+        h2 {
             text-align: center;
             margin-top: 20px;
-            
+
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -124,7 +127,8 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
             border: 1px solid #ddd;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
@@ -151,7 +155,9 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
             border-radius: 5px;
         }
 
-        input[type="text"], input[type="file"], input[type="submit"] {
+        input[type="text"],
+        input[type="file"],
+        input[type="submit"] {
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ddd;
@@ -227,6 +233,7 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         .form-container {
             text-align: left;
         }
+
         .card {
             width: 300px;
             margin: 10px;
@@ -252,6 +259,7 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         .close-icon:hover {
             color: red;
         }
+
         input[type="text"]#searchInput {
             width: 30%;
             padding: 12px 20px;
@@ -275,6 +283,7 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         button#searchButton:hover {
             background-color: #0044cc;
         }
+
         .add_air {
             text-align: right;
             margin-left: 37%;
@@ -294,79 +303,85 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         .add_airline:hover {
             background-color: #0044cc;
         }
-        .status-button-disabled {
-        background-color: #ccc; /* Change the color to a desired disabled state color */
-        color: #888; /* Change the text color to a lighter color */
-        }
-        #editForm {
-        /* Add your custom styles here */
-        border: 2px solid #003366;
-        padding: 30px;
-        width: 400px;
-        position: fixed;
-        top: 50%;
-        left: 60%;
-        transform: translate(-50%, -50%);
-        background-color: #f2f2f2;
-        z-index: 1;
-    }
-    #addForm {
-        /* Add your custom styles here */
-        border: 2px solid #003366;
-        padding: 30px;
-        width: 400px;
-        position: fixed;
-        top: 50%;
-        left: 60%;
-        transform: translate(-50%, -50%);
-        background-color: #f2f2f2;
-        z-index: 1;
-    }
-    input[type="submit"] {
-        /* Add your custom styles here */
-        background-color: #003366;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
 
-    input[type="submit"]:hover {
-        /* Add your custom styles here */
-        background-color: #0044cc;
-    }
+        .status-button-disabled {
+            background-color: #ccc;
+            /* Change the color to a desired disabled state color */
+            color: #888;
+            /* Change the text color to a lighter color */
+        }
+
+        #editForm {
+            /* Add your custom styles here */
+            border: 2px solid #003366;
+            padding: 30px;
+            width: 400px;
+            position: fixed;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            background-color: #f2f2f2;
+            z-index: 1;
+        }
+
+        #addForm {
+            /* Add your custom styles here */
+            border: 2px solid #003366;
+            padding: 30px;
+            width: 400px;
+            position: fixed;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            background-color: #f2f2f2;
+            z-index: 1;
+        }
+
+        input[type="submit"] {
+            /* Add your custom styles here */
+            background-color: #003366;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            /* Add your custom styles here */
+            background-color: #0044cc;
+        }
     </style>
 </head>
-<body >
 
+<body>
 
 <div class="form-popup" id="addForm" style="display: none;">
-        <form method="post" action="#" enctype="multipart/form-data" onsubmit="return validateAddForm()">
+    <form method="post" action="#" enctype="multipart/form-data" onsubmit="return validateAddForm()">
         <span class="close-icon" onclick="closeAddForm()">&times;</span>
         <br>
-        
+
         <h2>Add Airline</h2><br>
-            Airline Name: <input type="text" name="airline_name" id="airline_name" required onclick="validateFor('add')">
-            <span id="airlineNameError" style="color: red; display: none;"></span>
-            <br><br>
-            
-            Airline Logo:
-            <input type="file" name="img" accept="image/*" id="img" onchange="previewImage()" required>
-            <br><br>
-            <img src="#" id="preview" style="display:none; max-width:300px; max-height:300px;" alt="Image Preview">
-            <br>
-            <input type="submit" class="ad" name="submit" value="Add">
-            
-        </form>
-    </div>
+        Airline Name: <input type="text" name="airline_name" id="airline_name" required oninput="validateFor('add')">
+        <span id="airlineNameError" style="color: red; display: none;"></span>
+        <br><br>
+
+        Airline Logo:
+        <input type="file" name="img" accept="image/*" id="img" onchange="previewImage()" required>
+        <br><br>
+        <img src="#" id="preview" style="display:none; max-width:300px; max-height:300px;" alt="Image Preview">
+        <br>
+        <input type="submit" class="ad" name="submit" value="Add">
+
+    </form>
+</div>
 
 
-<br>
+    <br>
 
-<?php
-if (isset($errorMessage) && !empty($errorMessage)) {
+    <?php
+    if (isset($errorMessage) && !empty($errorMessage)) {
         echo "<div class='card'>";
         echo $errorMessage;
         echo "<span class='close-icon' onclick='this.parentElement.style.display=\"none\";'>&times;</span>";
@@ -374,76 +389,76 @@ if (isset($errorMessage) && !empty($errorMessage)) {
     }
     ?>
 
-<h2 class="heading" >Airline List</h2>
-<div style="display: flex;">
+    <h2 class="heading">Airline List</h2>
+    <div style="display: flex;">
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for Airline name...">
         <button id="searchButton" onclick="searchTable()">
             <i class="fas fa-search"></i>
         </button>
         <div class="add_air">
-<button class="add_airline" onclick="toggleAddForm()">+ Add Airline</button>
+            <button class="add_airline" onclick="toggleAddForm()">+ Add Airline</button>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 
-<table border="1">
-    <tr>
-        <th>SI No</th>
-        <th>Airline Name</th>
-        <th>Airline Logo</th>
-        <th>Edit</th>
-        <th>Disable/Enable</th>
-    </tr>
+    <table border="1">
+        <tr>
+            <th>SI No</th>
+            <th>Airline Name</th>
+            <th>Airline Logo</th>
+            <th>Edit</th>
+            <th>Disable/Enable</th>
+        </tr>
 
-    <?php
-    $result = mysqli_query($con, "SELECT * FROM airline");
-    $counter = 1;
-    while ($row = mysqli_fetch_array($result)) {
-        echo "<tr>";
-        echo "<td>" . $counter . "</td>";
-        echo "<td>" . $row['airline_name'] . "</td>";
-        echo "<td><img src='" . $row['logo'] . "' style='max-width:100px; max-height:100px;' alt='Airline Logo'></td>";
-        if ($row["status"] == 1) {
-            echo "<td><button class='edit-button' onclick='openEditForm(" . $row['airline_id'] . ", \"" . $row['airline_name'] . "\", \"" . $row['logo'] . "\", \"" . $row['status'] . "\")'>Edit</button></td>";
-        } else {
-            echo "<td><button class='edit-button status-button-disabled' disabled>Edit</button></td>";
-        }
-        
-        echo "<td>";
-        if ($row["status"] == 1) {
-            echo "<button onclick='changeStatus(" . $row["airline_id"] . ", 0, event)' class='status-button status-button-enabled'>Enabled</button>";
-        } else {
-            echo "<button onclick='changeStatus(" . $row["airline_id"] . ", 1, event)' class='status-button status-button-disabled'>Disabled</button>";
-        }
-        echo "</td>";
-        
-        echo "</td>";
-                echo "</tr>";
-                $counter++;
+        <?php
+        $result = mysqli_query($con, "SELECT * FROM airline");
+        $counter = 1;
+        while ($row = mysqli_fetch_array($result)) {
+            echo "<tr>";
+            echo "<td>" . $counter . "</td>";
+            echo "<td>" . $row['airline_name'] . "</td>";
+            echo "<td><img src='" . $row['logo'] . "' style='max-width:100px; max-height:100px;' alt='Airline Logo'></td>";
+            if ($row["status"] == 1) {
+                echo "<td><button class='edit-button' onclick='openEditForm(" . $row['airline_id'] . ", \"" . $row['airline_name'] . "\", \"" . $row['logo'] . "\", \"" . $row['status'] . "\")'>Edit</button></td>";
+            } else {
+                echo "<td><button class='edit-button status-button-disabled' disabled>Edit</button></td>";
             }
-    ?>
+
+            echo "<td>";
+            if ($row["status"] == 1) {
+                echo "<button onclick='changeStatus(" . $row["airline_id"] . ", 0, event)' class='status-button status-button-enabled'>Enabled</button>";
+            } else {
+                echo "<button onclick='changeStatus(" . $row["airline_id"] . ", 1, event)' class='status-button status-button-disabled'>Disabled</button>";
+            }
+            echo "</td>";
+
+            echo "</td>";
+            echo "</tr>";
+            $counter++;
+        }
+        ?>
 
 
-</table><br><br>
+    </table><br><br>
 
 
 
 
 
-<div class="form-popup" id="editForm">
+    <div class="form-popup" id="editForm">
         <form method="post" class="form-container" enctype="multipart/form-data" onsubmit="return validateEditForm()">
-        <span class="close-icon" onclick="closeEditForm()">&times;</span>
-                <br>
+            <span class="close-icon" onclick="closeEditForm()">&times;</span>
+            <br>
             <h2>Edit Airlines</h2>
             <input type="hidden" id="airline_id" name="airline_id" value="">
-           
+
             Airline Name: <input type="text" id="edit_airline_name" name="airline_name" required onclick="validateFor('edit')">
             <span id="airlineNameError" style="color: red; display: none;"></span>
 
             <br><br>
-            Airline Logo: <input type="file" name="img" accept="image/*" id="editImg" onchange="previewEditImage()" >
+            Airline Logo: <input type="file" name="img" accept="image/*" id="editImg" onchange="previewEditImage()">
             <br><br>
             <img src="#" id="editPreview" style="display:none; max-width:300px; max-height:300px;" alt="Image Preview">
             <br>
@@ -473,7 +488,7 @@ if (isset($errorMessage) && !empty($errorMessage)) {
         var file = document.querySelector('#img').files[0];
         var reader = new FileReader();
 
-        reader.onloadend = function () {
+        reader.onloadend = function() {
             preview.src = reader.result;
             preview.style.display = "block";
         }
@@ -502,29 +517,31 @@ if (isset($errorMessage) && !empty($errorMessage)) {
         var imgInput = document.getElementById("editImg");
         imgInput.value = ""; // Clear the previous value
         imgInput.setAttribute("data-old-value", logo);
-}
-        
-        function previewEditImage() {
-            var preview = document.querySelector('#editPreview');
-            var file = document.querySelector('#editImg').files[0];
-            var reader = new FileReader();
-
-            reader.onloadend = function () {
-                preview.src = reader.result;
-                preview.style.display = "block";
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-            }
-        }
-        function closeAddForm() {
-            document.getElementById("addForm").style.display = "none";
     }
+
+    function previewEditImage() {
+        var preview = document.querySelector('#editPreview');
+        var file = document.querySelector('#editImg').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            preview.src = reader.result;
+            preview.style.display = "block";
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    }
+
+    function closeAddForm() {
+        document.getElementById("addForm").style.display = "none";
+    }
+
     function closeEditForm() {
-    document.getElementById("editForm").style.display = "none";
+        document.getElementById("editForm").style.display = "none";
     }
     window.onclick = function(event) {
         var addForm = document.getElementById("addForm");
@@ -536,8 +553,6 @@ if (isset($errorMessage) && !empty($errorMessage)) {
             editForm.style.display = "none";
         }
     }
-
-   
 
 
     function changeStatus(id, status, event) {
@@ -555,37 +570,24 @@ if (isset($errorMessage) && !empty($errorMessage)) {
 
     }
 
-            // Add an event listener for form submission
-        document.querySelector('#addForm form').addEventListener('submit', function (event) {
-            if (!validateAddForm()) {
-                event.preventDefault(); // Prevent form submission if there are errors
-            }
-        });
-
-        // Add an event listener for form submission in the edit form
-        document.querySelector('#editForm form').addEventListener('submit', function (event) {
-            if (!validateEditForm()) {
-                event.preventDefault(); // Prevent form submission if there are errors
-            }
-        });
-
-        // Update the validation functions to return a boolean value
-        function validateAddForm() {
-        var formPrefix = '';
-        var airlineName = document.getElementById(formPrefix + 'airline_name').value;
-        var letters = /^[A-Za-z]+( [A-Za-z]+)*$/;
-        var errorElement = document.getElementById('airlineNameError');
-
-        if (!airlineName.match(letters)) {
-            errorElement.textContent = 'Error: Airline name should start with a letter and contain letters with at most one space between them.';
-            errorElement.style.display = 'block';
-            return false;
-        } else {
-            errorElement.style.display = 'none';
+    // Add an event listener for form submission
+    document.querySelector('#addForm form').addEventListener('submit', function(event) {
+        if (!validateAddForm()) {
+            event.preventDefault(); // Prevent form submission if there are errors
         }
+    });
 
-        return true;
-    }
+    // Add an event listener for form submission in the edit form
+    document.querySelector('#editForm form').addEventListener('submit', function(event) {
+        if (!validateEditForm()) {
+            event.preventDefault(); // Prevent form submission if there are errors
+        }
+    });
+
+    // Update the validation functions to return a boolean value
+    
+
+
 
     function validateEditForm() {
         var formPrefix = 'edit_';
@@ -603,29 +605,59 @@ if (isset($errorMessage) && !empty($errorMessage)) {
 
         return true;
     }
-    function searchTable() {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.querySelector("table");
-    tr = table.getElementsByTagName("tr");
 
-    // Loop through all table rows, and hide those that don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[1]; // Use index 1 to target the Airline Name column
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+    function searchTable() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.querySelector("table");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those that don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Use index 1 to target the Airline Name column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
+        }
+
+    }
+</script>
+
+<script>
+     function validateFor(formType) {
+        // Validate Airline Name in real-time
+        var airlineNameInput = document.getElementById('airline_name');
+        var airlineNameError = document.getElementById('airlineNameError');
+        var isValid = /^[a-zA-Z][a-zA-Z\s]{1,18}[a-zA-Z]$/.test(airlineNameInput.value);
+
+        if (!isValid || airlineNameInput.value.trim() === "") {
+            airlineNameError.innerHTML = "Invalid input. Please use only letters and avoid whitespace.";
+            airlineNameError.style.display = "block";
+        } else {
+            airlineNameError.style.display = "none";
         }
     }
 
-}
+    function validateAddForm() {
+        // Check if there are any error messages displayed
+        var errorMessages = document.querySelectorAll('.form-popup span[style="color: red; display: block;"]');
+        
+        if (errorMessages.length > 0) {
+            // If there are errors, prevent form submission
+            return false;
+        }
 
-
+        // If no errors, allow form submission
+        return true;
+    }
 </script>
+
+
 </html>
