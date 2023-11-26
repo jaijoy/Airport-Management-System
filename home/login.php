@@ -1,4 +1,8 @@
 <?php
+        include("includes/base.php");
+?>
+
+<?php
 include "../config/dbcon.php";
 session_start();
 if (isset($_SESSION['auth'])) {
@@ -24,7 +28,7 @@ if (isset($_SESSION['auth'])) {
         /*login design start here */
       
         * {
-            font-family: 'Poppins', sans-serif;
+            /* font-family: 'Poppins', sans-serif; */
             margin:0;
             padding: 0;
             box-sizing: border-box;
@@ -34,9 +38,10 @@ if (isset($_SESSION['auth'])) {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: url('images/regbg.jpg') no-repeat;
+            background: url('images/img2.jpg') no-repeat;
             background-size: cover;
             background-position: center;
+            font-family: 'Poppins', sans-serif;
         }
 
         .wrapper {
@@ -88,9 +93,7 @@ if (isset($_SESSION['auth'])) {
             font-size: 20px;
         }
 
-        .wrapper .box_forgot{
-            
-        }
+        
 
         .box_forgot a{
             display: flex;
@@ -148,61 +151,15 @@ if (isset($_SESSION['auth'])) {
         }
         /* login design end here */
 
-        /*header design start here */
-
-        nav{
-        width: 100%;
-        height: 75px;
-        line-height: 75px;
-        position: fixed;
-        padding: 0px 100px;
-        margin-top: -666px;
-        background-image: linear-gradient(#033747,#012733);
-        }
-        nav .logo p{
-            font-size: 30px;
-            font-weight: bold;
-            float:left;
-            color:white;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-        }
         
-        nav ul{
-            float:right;
-        }
-        
-        nav li{
-            display: inline-block;
-            list-style: none;
-
-        }
-        nav li a{
-            font-size: 18px;
-            text-transform: uppercase;
-            padding: 0px 30px;
-            color: white;
-            text-decoration: none;
-
-        }
-        nav li a:hover{
-            color: aqua;
-            
-        }
-
-        .content{
-            /* padding: 250px; */
-        }
-        /*header design end */    
+          
 
     </style>
 </head>
 <body>
 <div class="main">
     <!-- header-->
-    <?php
-        include("includes/base.php");
-    ?>
+    
     <!--header end here-->
 
     <div class="wrapper">
@@ -225,11 +182,13 @@ if (isset($_SESSION['auth'])) {
         <form action="../functions/rusers.php" method="POST">
             <h1>Login</h1>
             <div class="box1">
-                <input type="email" placeholder="Email" name="email" required>
+                Email
+                <input type="email" placeholder="" name="email" required>
                 <i class='bx bxs-envelope'></i>
             </div>
             <div class="box1">
-                <input type="password" placeholder="Password" name="pswd" required>
+                Password
+                <input type="password" placeholder="" name="pswd" required>
                 <i class='bx bxs-lock'></i>
             </div>
 
@@ -248,8 +207,9 @@ if (isset($_SESSION['auth'])) {
     </div>
 </div>
 
-
-  
+<?php
+        include("includes/foot.php");
+?>
 
 </body>
 </html>

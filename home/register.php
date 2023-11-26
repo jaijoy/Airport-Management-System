@@ -1,6 +1,11 @@
 <?php
 include "../config/dbcon.php";
 session_start();
+if (isset($_SESSION['auth'])) {
+    // User is already logged in, so redirect to the home page or another appropriate page.
+    header('Location: index.php'); // You can change 'index.php' to the desired page.
+    exit(); // Ensure no further code execution on this page.
+}
 ?>
 
 
@@ -22,22 +27,25 @@ session_start();
         /*login design start here */
       
         * {
-            font-family: 'Poppins', sans-serif;
+           
             margin:0;
             padding: 0;
             box-sizing: border-box;
         }
         .main{
+            /* font-family: 'Poppins', sans-serif; */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: url('images/regbg.jpg') no-repeat;
+            background: url('images/img2.jpg') no-repeat;
             background-size: cover;
             background-position: center;
+            
         }
 
         .wrapper {
+            font-family: 'Poppins', sans-serif;
             width: 420px;
             background: transparent;
             border:2px solid rgba(225, 225, 255, .2);
@@ -87,10 +95,6 @@ session_start();
             font-size: 20px;
         }
 
-       
-
-       
-
         .wrapper .btn{
             width:100% ;
             height: 45px;
@@ -126,58 +130,7 @@ session_start();
         }
         /* login design end here */
 
-        /*header design start here */
-
-        nav{
-        width: 100%;
-        height: 75px;
-        line-height: 75px;
-        position: fixed;
-        padding: 0px 100px;
-        margin-top: -666px;
-        background-image: linear-gradient(#033747,#012733);
-        }
-        nav .logo p{
-            font-size: 30px;
-            font-weight: bold;
-            float:left;
-            color:white;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-        }
-        
-        nav ul{
-            float:right;
-        }
-        
-        nav li{
-            display: inline-block;
-            list-style: none;
-
-        }
-        nav li a{
-            font-size: 18px;
-            text-transform: uppercase;
-            padding: 0px 30px;
-            color: white;
-            text-decoration: none;
-
-        }
-        nav li a:hover{
-            color: aqua;
-            
-        }
-        .sec_msg{
-            color:red;
-        }
-        .error{
-            color:red;
-        }
-
-        .content{
-            /* padding: 250px; */
-        }
-        /*header design end */    
+ 
 
     </style>
 </head>
@@ -216,23 +169,28 @@ session_start();
             
         <div class="box1">
             
-            Name
+            <label for="name">Name</label>
             <input type="text" placeholder="" name="username" id="name" required>
             <i class='bx bxs-user'></i>
             <span class="error" id="nameError"></span>
         </div>
+
         <div class="box1">
-            Email<input type="email" placeholder="" name="email" id="email" required>
+            Email
+            <input type="email" placeholder="" name="email" id="email" required>
             <i class='bx bxs-envelope'></i>
             <span class="error" id="emailError"></span>
         </div>
+
         <div class="box1">
-            Password<input type="password" placeholder="" name="psw1" id="password" required>
+            Password
+            <input type="password" placeholder="" name="psw1" id="password" required>
             <i class='bx bxs-lock'></i>
             <span class="error" id="passwordError"></span>
         </div>
         <div class="box1">
-            Confirm Password<input type="password" placeholder="" name="psw2" id="confirmPassword" required>
+            Confirm Password
+            <input type="password" placeholder="" name="psw2" id="confirmPassword" required>
             <i class='bx bxs-lock'></i>
             <span class="error" id="confirmPasswordError"></span>
         </div>
@@ -243,10 +201,11 @@ session_start();
             <p>Already have an account? <a href="login.php">Login</a></p>
         </div>
         </form>
-        </div>
+</div>
+</div>
         
 
-    <script>
+<script>
             // Function to clear an error message
             function clearError(elementId) {
             var errorElement = document.getElementById(elementId);
@@ -299,7 +258,7 @@ session_start();
     } else {
         clearError('passwordError');
     }
-}
+    }
 
         // Function to validate confirm password field
         function validateConfirmPassword() {
@@ -336,7 +295,9 @@ session_start();
 
             return true; // Submit the form if all validation checks pass
         }
-    </script>
-
+</script>
+<?php
+        include("includes/foot.php");
+?>
 </body>
 </html>
