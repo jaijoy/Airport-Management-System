@@ -11,39 +11,14 @@ include "../config/dbcon.php";
     <head>
     <style>
 
-
-        input[type="text"]#searchInput {
-            width: 30%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button#searchButton {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            margin: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        button#searchButton:hover {
-            background-color: #45a049;
-        }
-
-        .bo{
-            font-family: 'Arial', sans-serif;
+            .bodyy{font-family: 'Arial', sans-serif;
             background-color: #f2f2f2;
             margin: 0;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         h2 {
@@ -62,11 +37,11 @@ include "../config/dbcon.php";
         }
 
         th, td {
-            padding: 12px;
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
+
         th {
             background-color: #4CAF50;
             color: white;
@@ -79,42 +54,32 @@ include "../config/dbcon.php";
             background-color: #f5f5f5;
         }
 
-        
-        .edit-link{
+        .edit-link, button {
             text-decoration: none;
             color: #3498db;
             font-weight: bold;
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 15px;
             cursor: pointer;
             border-radius: 4px;
-        }
-        .edit-link:hover {
-            background-color: #2980b9;
-        }
-        button {
-            text-decoration: none;
-            color: #3498db;
-            font-weight: bold;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 4px;
+            display: inline-block;
+            transition: background-color 0.3s;
         }
 
-        button:hover {
+        .edit-link:hover, button:hover {
             background-color: #2980b9;
         }
-        
-        th, td {
-            max-width: 250px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+        .enable-btn {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .disable-btn {
+            background-color: #e74c3c !important;
+            color: white !important;
         }
 
         @media screen and (max-width: 600px) {
@@ -141,21 +106,10 @@ include "../config/dbcon.php";
                 width: 100%;
                 background-color: #4CAF50;
             }
-            .enable-btn {
-                background-color: #4CAF50 !important;
-                color: white !important;
-            }
-
-            .disable-btn {
-                background-color: #e74c3c !important;
-                color: white !important;
-            }  
         }
-
     </style>
-        
     </head>
-    <body class="bo">
+    <body class="bodyy">
 
 
 <?php
@@ -189,8 +143,10 @@ $select_query = "SELECT
     flight.flight_name,
     airline.airline_name AS f_airline_name,
     airbus.airbus_name AS f_airbus_name,
-    flight.f_departure,
-    flight.f_arrival,
+    departure_airport.airport_name AS departure_airport_name,
+    departure_airport.airport_location AS departure_airport_location,
+    destination_airport.airport_name AS destination_airport_name,
+    destination_airport.airport_location AS destination_airport_location,
     flight.stop,
     flight.flight_service,
     flight.price,
@@ -202,16 +158,15 @@ JOIN
 JOIN
     airbus ON flight.airbus_id = airbus.airbus_id
 JOIN
-    airport AS departure_airport ON flight.airport_id = departure_airport.airport_id
+    airport AS departure_airport ON flight.f_departure = departure_airport.airport_id
 JOIN
-    airport AS destination_airport ON flight.airport_id = destination_airport.airport_id
-
-
+    airport AS destination_airport ON flight.f_arrival = destination_airport.airport_id
 WHERE
     airline.status = 1 AND
     airbus.status = 0 AND
     departure_airport.status = 1 AND
     destination_airport.status = 1";
+
 
 
 
@@ -253,8 +208,11 @@ if ($result) {
                     <td><?php echo $row['f_airline_name']; ?></td>
                     <td><?php echo $row['f_airbus_name']; ?></td>
                     <td><?php echo $row['flight_name']; ?></td>
-                    <td><?php echo $row['f_departure']; ?></td>
-                    <td><?php echo $row['f_arrival']; ?></td>
+
+                    <td><?php echo $row['departure_airport_name'].$row['departure_airport_location']; ?></td>
+    
+    <td><?php echo $row['destination_airport_name'].$row['destination_airport_location']; ?></td>
+                    
                     <td><?php echo $row['stop']; ?></td>
                     <td><?php echo $row['flight_service']; ?></td>
                     <td><?php echo $row['price']; ?></td>

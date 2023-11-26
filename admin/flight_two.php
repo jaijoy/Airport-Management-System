@@ -244,7 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
    
 </html>
-
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $flight_name = $_POST['Flight_name'];
@@ -256,19 +255,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $flight_service = $_POST['flight_service'];
     $price = $_POST['price'];
 
+    // Fetching airport_id for departure and arrival locations
+    $departure_airport_query = "SELECT airport_id FROM airport WHERE airport_id = $departure_location";
+    $arrival_airport_query = "SELECT airport_id FROM airport WHERE airport_id = $arrival_location";
+
+    $departure_airport_result = mysqli_query($con, $departure_airport_query);
+    $arrival_airport_result = mysqli_query($con, $arrival_airport_query);
+
+    $departure_airport_row = mysqli_fetch_assoc($departure_airport_result);
+    $arrival_airport_row = mysqli_fetch_assoc($arrival_airport_result);
+
+    $departure_airport_id = $departure_airport_row['airport_id'];
+    $arrival_airport_id = $arrival_airport_row['airport_id'];
+
     // Check if a similar record already exists
-    $check_query = "SELECT * FROM flight WHERE flight_name = '$flight_name' AND airline_id = $airline_id AND airbus_id = $airbus_id AND f_departure = (SELECT airport_location FROM airport WHERE airport_id = $departure_location) AND f_arrival = (SELECT airport_location FROM airport WHERE airport_id = $arrival_location) AND stop = '$stop' AND flight_service = '$flight_service' AND price = $price";
+    $check_query = "SELECT * FROM flight WHERE flight_name = '$flight_name' ";
 
     $check_result = mysqli_query($con, $check_query);
 
-    if (mysqli_num_rows($check_result) > 0) {
-        // Display error message in a popup box
-        echo "<script>
-                alert('Record with similar values already exists');
-            </script>";
+    if ($check_result === false) {
+        echo "Error: " . mysqli_error($con);
     } else {
+        // Check if a similar record already exists
+        $num_rows = mysqli_num_rows($check_result);
+    
+        if ($num_rows > 0) {
+            // Display error message in a popup box
+            echo "<script>
+                    alert('Record with similar values already exists');
+                </script>";
+        } else {
         // If no similar record exists, insert the new record
-        $insert_query = "INSERT INTO flight (flight_name, f_airline_name, f_airbus_name, f_departure, f_arrival, airline_id, airport_id, airbus_id, stop, flight_service, price) VALUES ('$flight_name', (SELECT airline_name FROM airline WHERE airline_id = $airline_id), (SELECT airbus_name FROM airbus WHERE airbus_id = $airbus_id), (SELECT airport_location FROM airport WHERE airport_id = $departure_location), (SELECT airport_location FROM airport WHERE airport_id = $arrival_location), $airline_id, $departure_location, $airbus_id, '$stop', '$flight_service', $price)";
+        $insert_query = "INSERT INTO flight (flight_name, f_airline_name, f_airbus_name, f_departure, f_arrival, airline_id, airbus_id, stop, flight_service, price) VALUES ('$flight_name', (SELECT airline_name FROM airline WHERE airline_id = $airline_id), (SELECT airbus_name FROM airbus WHERE airbus_id = $airbus_id), $departure_airport_id, $arrival_airport_id, $airline_id, $airbus_id, '$stop', '$flight_service', $price)";
 
         if (mysqli_query($con, $insert_query)) {
             // Display success message in a popup box
@@ -280,7 +298,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>
                     alert('Error: " . mysqli_error($con) . "');
                 </script>";
-        }
+      
+          }
     }
 }
+}
 ?>
+
