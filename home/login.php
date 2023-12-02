@@ -38,7 +38,7 @@ if (isset($_SESSION['auth'])) {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: url('images/img2.jpg') no-repeat;
+            background: url('images/new3.jpg') no-repeat;
             background-size: cover;
             background-position: center;
             font-family: 'Poppins', sans-serif;

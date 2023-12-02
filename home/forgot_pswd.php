@@ -88,9 +88,7 @@ if (isset($_SESSION['auth'])) {
             font-size: 20px;
         }
 
-        .wrapper .box_forgot{
-            
-        }
+       
 
         .box_forgot a{
             display: flex;
@@ -190,9 +188,7 @@ if (isset($_SESSION['auth'])) {
             
         }
 
-        .content{
-            /* padding: 250px; */
-        }
+        
         /*header design end */    
 
     </style>

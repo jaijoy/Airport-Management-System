@@ -309,27 +309,6 @@ if(isset($_GET['delete_id']) && !empty($_GET['delete_id'])) {
 </html>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <?php
 // Your PHP code for querying and displaying the table
 

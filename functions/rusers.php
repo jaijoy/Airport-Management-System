@@ -91,46 +91,49 @@ if(isset($_POST["register_btn"]))
     //for login button
 
 
-    else if (isset($_POST["lbtn"])) {
+    if (isset($_POST["lbtn"])) {
         $mail = $_POST["email"];
         $provided_password = $_POST["pswd"];
     
-        // Fetch the hashed password and role from the database
-        $sql = "SELECT `username`, `email`, `pass1`, `role` FROM `users` WHERE `email`='$mail'";
+        // Fetch the hashed password, role, and verify_status from the database
+        $sql = "SELECT `username`, `email`, `pass1`, `role`, `verify_status` FROM `users` WHERE `email`='$mail'";
         $result = mysqli_query($con, $sql);
     
         if ($result && mysqli_num_rows($result) > 0) {
             $userdata = mysqli_fetch_assoc($result);
-            $hashed_password = $userdata['pass1'];
-            $role = $userdata['role']; // Move this line to after fetching the role
+            $verify_status = $userdata['verify_status'];
     
-            // Verify the provided password
-            if (password_verify($provided_password, $hashed_password)) {
-                // Password is correct, proceed with login
-                $_SESSION['auth'] = true;
-                
-                // ... Rest of my login logic ...
+            if ($verify_status == "1") {
+                $hashed_password = $userdata['pass1'];
+                $role = $userdata['role'];
     
-                $name = $userdata['username'];
-                $mail = $userdata['email'];
-                echo $role;
-                $_SESSION['auth_user'] = [
-                    'username' => $name,
-                    'email' => $mail
-                ];
+                // Verify the provided password
+                if (password_verify($provided_password, $hashed_password)) {
+                    // Password is correct, proceed with login
+                    $_SESSION['auth'] = true;
+                    $name = $userdata['username'];
+                    $mail = $userdata['email'];
+                    $_SESSION['auth_user'] = [
+                        'username' => $name,
+                        'email' => $mail
+                    ];
     
-                $_SESSION['role'] = $role;
+                    $_SESSION['role'] = $role;
     
-                if ($role == 1) {
-                    //$_SESSION['message'] = "Welcome to the dashboard";
-                    header('Location: ../admin/index.php');
+                    if ($role == 1) {
+                        header('Location: ../admin/index.php');
+                        exit(0);
+                    } else {
+                        header('Location: ../home/index.php');
+                    }
                 } else {
-                    //$_SESSION['message'] = "Logged in successfully";
-                    header('Location: ../home/index.php');
+                    // Password is incorrect
+                    $_SESSION['message'] = 'Invalid credentials';
+                    header('Location: ../home/login.php');
                 }
             } else {
-                // Password is incorrect
-                $_SESSION['message'] = 'Invalid credentials';
+                // Email not verified
+                $_SESSION['message'] = 'Please verify your email address';
                 header('Location: ../home/login.php');
             }
         } else {
@@ -139,4 +142,4 @@ if(isset($_POST["register_btn"]))
             header('Location: ../home/login.php');
         }
     }
-?>    
+    

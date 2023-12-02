@@ -88,10 +88,7 @@ if (isset($_SESSION['auth'])) {
             font-size: 20px;
         }
 
-        .wrapper .box_forgot{
-            
-        }
-
+        
         .box_forgot a{
             display: flex;
             justify-content: space-between;
@@ -190,9 +187,7 @@ if (isset($_SESSION['auth'])) {
             
         }
 
-        .content{
-            /* padding: 250px; */
-        }
+        
         /*header design end */    
 
     </style>
@@ -224,7 +219,13 @@ if (isset($_SESSION['auth'])) {
 
         <form action="http://localhost/Airport/functions/password_reset_code.php" method="POST">
             <h1>Change Password</h1>
-            <input type="text" name="password_token" value="<?php if(isset($_GET['token'])){echo $_GET['token'];} ?>">
+
+            <?php
+            echo "hello world";
+             if(isset($_GET['token'])){
+            
+                echo $_GET['token'];
+                } ?>
             <div class="box1">
                 <input type="email" placeholder="Enter your Email Address" name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
                 <i class='bx bxs-envelope'></i>
@@ -254,3 +255,5 @@ if (isset($_SESSION['auth'])) {
 
 </body>
 </html>
+
+

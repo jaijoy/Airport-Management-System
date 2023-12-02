@@ -13,7 +13,7 @@ if (isset($_POST["abtn"])) {
     if (move_uploaded_file($_FILES["img"]["tmp_name"], $targetFile)) {
         // Image uploaded successfully
         // Insert data into the database
-        $sql = "INSERT INTO airline(a_name, a_image) VALUES ('$airlineName', '$targetFile')";
+        $sql = "INSERT INTO airline(airline_name, logo) VALUES ('$airlineName', '$targetFile')";
 
         if ($con->query($sql) === TRUE) {
             // Data inserted successfully

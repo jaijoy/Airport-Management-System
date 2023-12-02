@@ -15,25 +15,17 @@ if (isset($_SESSION['auth'])) {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
-   
-    <title>login</title>
-   
-    <style>
-
-             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
         
-        /*login design start here */
-      
-        * {
-           
-            margin:0;
-            padding: 0;
-            box-sizing: border-box;
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
         }
-        .main{
-            /* font-family: 'Poppins', sans-serif; */
+
+        .main {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,169 +33,165 @@ if (isset($_SESSION['auth'])) {
             background: url('images/img2.jpg') no-repeat;
             background-size: cover;
             background-position: center;
-            
         }
 
         .wrapper {
-            font-family: 'Poppins', sans-serif;
-            width: 420px;
-            background: transparent;
-            border:2px solid rgba(225, 225, 255, .2);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-            color:white;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #007bff;
             border-radius: 10px;
-            padding: 30px 40px;
-            margin-top: 130px;
+            padding: 30px 20px;
+            margin-top: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
-        .wrapper h1{
-            font-size: 36px;
+
+        .wrapper h1 {
+            font-size: 24px;
             text-align: center;
-
+            color: #007bff;
         }
-        .wrapper .box1{
+
+        .box1 {
             position: relative;
+            margin-bottom: 20px;
+        }
+
+        .box1 label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .box1 input {
             width: 100%;
-            height: 50px;
-            margin: 30px 0;
-            
-
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
         }
 
-        .box1 input{
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            outline:none;
-            border:2px solid rgba(225, 225, 255, .2);
-            border-radius: 40px;
-            font-size: 16px;
-            color: white;
-            padding: 20px 45px 20px 20px;
-
-        }
-
-        .box1 input::placeholder{
-            color: white;
-        }
-        .box1 i {
+        /* .box1 i {
             position: absolute;
             right: 20px;
-            top:90%;
+            top:70%;
             transform: translateY(-50%);
             font-size: 20px;
+            color: #007bff;
+        } */
+
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            font-weight: 20px;
         }
 
-        .wrapper .btn{
-            width:100% ;
-            height: 45px;
-            background: white;
-            border:none;
-            outline: none;
-            border-radius: 40px;
-            box-shadow: 0 0 10px rgba(0,0, 0, 1);
+        .but {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 152px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size:16px;
-            color:#333;
-            font-weight: 600;
-
-
-        }
-
-        .wrapper .register_link {
-            font-size: 14.5px;
             text-align: center;
-            margin: 20px 0 15px;
-
-
+            transition: background-color 0.3s ease;
         }
 
-        .register_link p a{
-            color:white;
+        .but:hover {
+            background-color: #0056b3;
+        }
+
+        .register_link {
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .register_link a {
+            color: #007bff;
             text-decoration: none;
             font-weight: 600;
         }
 
-        .register_link p a:hover{
+        .register_link a:hover {
             text-decoration: underline;
         }
-        /* login design end here */
-
- 
-
     </style>
+    <title>SignUp</title>
 </head>
 <body>
-  
-<div class="main">
-    
-    <!-- header-->
-    <?php
+    <div class="main">
+        <?php
         include("includes/base.php");
     ?>
-    <!--header end here-->
-    
-
-<div class="wrapper">
-     <!-- displaying error from getbootsrap.com -->
-
-     <div class="sec_msg">
+        <div class="wrapper">
+            <div class="sec_msg">
+                
+                <?php 
+                    if(isset($_SESSION['message']))
+                {?>
+                    <!--succesful msg aftr register -->
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Hey!</strong><?=$_SESSION['message'];  ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php
+                    unset($_SESSION['message']);
+                } ?>
         
-     <?php 
-         if(isset($_SESSION['message']))
-        {?>
-            <!--succesful msg aftr register -->
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Hey!</strong><?=$_SESSION['message'];  ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php
-          unset($_SESSION['message']);
-        } ?>
+            </div>
+            <form action="../functions/rusers.php" method="POST" onsubmit="return validateForm();">
+                <h1 class="mb-4">SignUp</h1>
 
+                <div class="form-group box1">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" placeholder="" name="username" id="name" required
+                        oninput="validateName()">
+                    <!-- <i class='bx bxs-user'></i> -->
+                    <span class="error" id="nameError"></span>
+                </div>
+
+                <div class="form-group box1">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="" name="email" id="email" required
+                        oninput="validateEmail()">
+                    <!-- <i class='bx bxs-envelope'></i> -->
+                    <span class="error" id="emailError"></span>
+                </div>
+
+                <div class="form-group box1">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" placeholder="" name="psw1" id="password" required
+                        oninput="validatePassword()">
+                    <!-- <i class='bx bxs-lock'></i> -->
+                    <span class="error" id="passwordError"></span>
+                </div>
+
+                
+                
+                <div class="form-group box1">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" placeholder="" name="psw2" id="confirmPassword" required
+                        oninput="validateConfirmPassword()">
+                    <!-- <i class='bx bxs-lock'></i> -->
+                    <span class="error" id="confirmPasswordError"></span>
+                </div>
+
+                <div class="register">
+                    <p>Forgot Password? <a href="forgot_pswd.php">Click here..</a></p>
+                </div>
+                
+                <button type="submit" class="but" name="register_btn">SignUp</button>
+
+                <div class="register_link mt-3">
+                    <p>Already have an account? <a href="login.php">Login</a></p>
+                </div>
+            </form>
+        </div>
     </div>
-        
-    <form action="../functions/rusers.php" method="POST" onsubmit="return validateForm();">
-            <h1>SignUp</h1>
-            
-        <div class="box1">
-            
-            <label for="name">Name</label>
-            <input type="text" placeholder="" name="username" id="name" required>
-            <i class='bx bxs-user'></i>
-            <span class="error" id="nameError"></span>
-        </div>
 
-        <div class="box1">
-            Email
-            <input type="email" placeholder="" name="email" id="email" required>
-            <i class='bx bxs-envelope'></i>
-            <span class="error" id="emailError"></span>
-        </div>
-
-        <div class="box1">
-            Password
-            <input type="password" placeholder="" name="psw1" id="password" required>
-            <i class='bx bxs-lock'></i>
-            <span class="error" id="passwordError"></span>
-        </div>
-        <div class="box1">
-            Confirm Password
-            <input type="password" placeholder="" name="psw2" id="confirmPassword" required>
-            <i class='bx bxs-lock'></i>
-            <span class="error" id="confirmPasswordError"></span>
-        </div>
-
-        <button type="submit" class="btn" name="register_btn">SignUp</button>
-
-        <div class="register_link">
-            <p>Already have an account? <a href="login.php">Login</a></p>
-        </div>
-        </form>
-</div>
-</div>
-        
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
             // Function to clear an error message
