@@ -1,6 +1,8 @@
 <?php
 include "../config/dbcon.php";
+
 session_start();
+
 if (isset($_SESSION['auth'])) {
     // User is already logged in, so redirect to the home page or another appropriate page.
     header('Location: index.php'); // You can change 'index.php' to the desired page.
@@ -228,15 +230,12 @@ if (isset($_SESSION['auth'])) {
 
             <button type="submit" class="btn" name="reset">Send Password Reset Link</button>
 
-    
-
         </form>
 
     </div>
 </div>
 
 
-  
 
 </body>
 </html>

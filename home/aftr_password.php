@@ -1,3 +1,6 @@
+<?php
+        include("includes/base.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

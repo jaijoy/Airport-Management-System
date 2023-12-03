@@ -1,3 +1,4 @@
+
 <?php
 include "../config/dbcon.php";
 session_start();
@@ -7,29 +8,16 @@ if (isset($_SESSION['auth'])) {
     exit(); // Ensure no further code execution on this page.
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-   
-    <title>password reset</title>
-   
+    <title>Password Reset</title>
     <style>
-
-             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
-        
-        /*login design start here */
-      
-        * {
-            font-family: 'Poppins', sans-serif;
-            margin:0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .main{
+        .main {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,219 +29,109 @@ if (isset($_SESSION['auth'])) {
 
         .wrapper {
             width: 420px;
-            background: transparent;
-            border:2px solid rgba(225, 225, 255, .2);
-            backdrop-filter: blur(20px);
+            background-color: black;
+            border: 2px solid rgba(225, 225, 255, .2);
+            /* backdrop-filter: blur(100px); */
             box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-            color:white;
+            color: white;
             border-radius: 10px;
             padding: 30px 40px;
         }
-        .wrapper h1{
-            font-size: 36px;
-            text-align: center;
 
+        .error {
+            color: red;
         }
-        .wrapper .box1{
-            position: relative;
-            width: 100%;
-            height: 50px;
-            margin: 30px 0;
-            
-
-        }
-
-        .box1 input{
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            outline:none;
-            border:2px solid rgba(225, 225, 255, .2);
-            border-radius: 40px;
-            font-size: 16px;
-            color: white;
-            padding: 20px 45px 20px 20px;
-
-        }
-
-        .box1 input::placeholder{
-            color: white;
-        }
-        .box1 i {
-            position: absolute;
-            right: 20px;
-            top:50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-        }
-
-        
-        .box_forgot a{
-            display: flex;
-            justify-content: space-between;
-            font-size: 14.5px;
-            color: white;
-            margin-top: -20px;
-            margin-left: 23px;
-            margin-bottom: 12px;
-            text-decoration: none;
-            
-            
-        }
-
-        .box_forgot a:hover{
-            text-decoration: underline;
-        }
-
-        .wrapper .btn{
-            width:100% ;
-            height: 45px;
-            background: white;
-            border:none;
-            outline: none;
-            border-radius: 40px;
-            box-shadow: 0 0 10px rgba(0,0, 0, 1);
-            cursor: pointer;
-            font-size:16px;
-            color:#333;
-            font-weight: 600;
-
-
-        }
-
-        .wrapper .register_link {
-            font-size: 14.5px;
-            text-align: center;
-            margin: 20px 0 15px;
-
-
-        }
-
-        .register_link p a{
-            color:white;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register_link p a:hover{
-            text-decoration: underline;
-        }
-
-        .sec_msg{
-            color:red;
-        }
-        /* login design end here */
-
-        /*header design start here */
-
-        nav{
-        width: 100%;
-        height: 75px;
-        line-height: 75px;
-        position: fixed;
-        padding: 0px 100px;
-        margin-top: -666px;
-        background-image: linear-gradient(#033747,#012733);
-        }
-        nav .logo p{
-            font-size: 30px;
-            font-weight: bold;
-            float:left;
-            color:white;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-        }
-        
-        nav ul{
-            float:right;
-        }
-        
-        nav li{
-            display: inline-block;
-            list-style: none;
-
-        }
-        nav li a{
-            font-size: 18px;
-            text-transform: uppercase;
-            padding: 0px 30px;
-            color: white;
-            text-decoration: none;
-
-        }
-        nav li a:hover{
-            color: aqua;
-            
-        }
-
-        
-        /*header design end */    
-
     </style>
 </head>
 <body>
-<div class="main">
-    <!-- header-->
-    <?php
-        include("includes/base.php");
-    ?>
-    <!--header end here-->
+    <div class="main">
+        <div class="wrapper">
+            <form action="http://localhost/Airport/functions/password_reset_code.php" method="POST" onsubmit="return validateForm();" class="needs-validation" novalidate>
+                <h1 class="text-center">Change Password</h1>
 
-    <div class="wrapper">
-    <div class="sec_msg">
-        
-        <?php 
-            if(isset($_SESSION['message']))
-           {?>
-               <!--succesful msg aftr register -->
-           <div class="alert alert-warning alert-dismissible fade show" role="alert">
-           <strong>Hey!</strong><?=$_SESSION['message'];  ?>
-           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-           </div>
-           <?php
-             unset($_SESSION['message']);
-           } ?>
-   
-       </div>
+                <input type="hidden" name="password_token" value="<?php if (isset($_GET['token'])) { echo $_GET['token']; } ?>">
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your Email Address" name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
+                    <!-- <i class='bx bxs-envelope'></i> -->
+                </div>
 
-        <form action="http://localhost/Airport/functions/password_reset_code.php" method="POST">
-            <h1>Change Password</h1>
+                <div class="form-group">
+                    <label for="pswd">New Password</label>
+                    <input type="password" class="form-control" id="pswd" placeholder="New Password" name="pswd" required>
+                    <span class="error" id="passwordError"></span>
+                </div>
 
-            <?php
-            echo "hello world";
-             if(isset($_GET['token'])){
-            
-                echo $_GET['token'];
-                } ?>
-            <div class="box1">
-                <input type="email" placeholder="Enter your Email Address" name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
-                <i class='bx bxs-envelope'></i>
-            </div>
-            <div class="box1">
-                <input type="password" placeholder="New Password" name="pswd" required>
-                <i class='bx bxs-lock'></i>
-            </div>
+                <div class="form-group">
+                    <label for="cpswd">Confirm Password</label>
+                    <input type="password" class="form-control" id="cpswd" placeholder="Confirm Password" name="cpswd" required>
+                    <span class="error" id="confirmPasswordError"></span>
+                </div>
 
-            <div class="box1">
-                <input type="password" placeholder="Confirm Password" name="cpswd" required>
-                <i class='bx bxs-lock'></i>
-            </div>
-           
-
-            <button type="submit" class="btn" name="pswd_update">Update Password</button>
-
-            
-
-        </form>
-
+                <button type="submit" class="btn btn-primary" name="pswd_update">Update Password</button>
+            </form>
+        </div>
     </div>
-</div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  
+    <script>
+         function clearError(elementId) {
+        var errorElement = document.getElementById(elementId);
+        errorElement.textContent = '';
+    }
 
+    // Function to validate password field
+    function validatePassword() {
+        var password = document.getElementById('pswd').value;
+        var passwordError = document.getElementById('passwordError');
+
+        // Password regex pattern for complexity: 
+        // - At least one special symbol from !@#$%^&*.
+        // - At least one digit (number).
+        // - At least one lowercase letter.
+        // - At least one uppercase letter.
+        // - The total length of the password should be between 6 and 8 characters.
+        var passwordPattern = /^(?=.*[!@#$%^&*])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,8}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordError.textContent = 'Password must meet the specified requirements';
+        } else {
+            clearError('passwordError');
+        }
+    }
+
+        function validateConfirmPassword() {
+            var password = document.getElementById('pswd').value;
+            var confirmPassword = document.getElementById('cpswd').value;
+            var confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            if (confirmPassword !== password) {
+                confirmPasswordError.textContent = 'Passwords do not match';
+            } else {
+                clearError('confirmPasswordError');
+            }
+        }
+
+        document.getElementById('pswd').addEventListener('input', validatePassword);
+        document.getElementById('cpswd').addEventListener('input', validateConfirmPassword);
+
+        function validateForm() {
+            validatePassword();
+            validateConfirmPassword();
+
+            var errorElements = document.querySelectorAll('.error');
+            for (var i = 0; i < errorElements.length; i++) {
+                if (errorElements[i].textContent !== '') {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>
-
-
