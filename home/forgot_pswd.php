@@ -1,8 +1,6 @@
 <?php
 include "../config/dbcon.php";
-
 session_start();
-
 if (isset($_SESSION['auth'])) {
     // User is already logged in, so redirect to the home page or another appropriate page.
     header('Location: index.php'); // You can change 'index.php' to the desired page.
@@ -90,7 +88,9 @@ if (isset($_SESSION['auth'])) {
             font-size: 20px;
         }
 
-       
+        .wrapper .box_forgot{
+            
+        }
 
         .box_forgot a{
             display: flex;
@@ -190,7 +190,9 @@ if (isset($_SESSION['auth'])) {
             
         }
 
-        
+        .content{
+            /* padding: 250px; */
+        }
         /*header design end */    
 
     </style>
@@ -230,12 +232,15 @@ if (isset($_SESSION['auth'])) {
 
             <button type="submit" class="btn" name="reset">Send Password Reset Link</button>
 
+    
+
         </form>
 
     </div>
 </div>
 
 
+  
 
 </body>
 </html>

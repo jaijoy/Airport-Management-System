@@ -92,7 +92,7 @@
                    <i class="fas fa-user mx-1"></i> Profile
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="update_profile.php">My account</a>
+                    <a class="dropdown-item" href="#">My account</a>
                     <a class="dropdown-item" href="logout.php">Log out</a>
                 </div>
             </li>
