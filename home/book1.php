@@ -53,7 +53,7 @@
 
             <!-- Your existing form fields... -->
             <div class="form-group">
-                <label for="numInfants">Number of Infants (below 2 years):</label>
+                <label for="numInfants">No Infants (below 2 years):</label>
                 <input type="number" class="form-control" id="numInfants" name="numInfants" min="0" value="0">
             </div>
 
