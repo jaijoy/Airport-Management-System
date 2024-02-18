@@ -14,24 +14,63 @@ if (!isset($_SESSION['auth_user']['email'])) {
 
 $userEmail = $_SESSION['auth_user']['email'];
 
-if (isset($_GET['flightId'])) {
-    $flightId = $_GET['flightId'];
+if (isset($_GET['book_id'])) {
+    $book_id = $_GET['book_id'];
 }
 
-// Fetch $totalHuman from the book_one table based on the email and flight_id
-$sqlFetchTotalHuman = "SELECT total_human FROM book_one WHERE email = '$userEmail' AND flight_id = '$flightId'";
-$result = $con->query($sqlFetchTotalHuman);
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $totalHuman = $row['total_human'];
-} 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $book_id = $_POST['bookid'];
+    $total_Human = $_POST['total_human'];
+    echo "Book ID from form submission".$book_id;
 
-// Close the result set
-$result->close();
+    echo "human ID from form submission".$total_Human;
+
+    // Loop to insert data for each passenger
+    for ($i = 1; $i <= $total_Human; $i++) {
+        
+        // Check if the required fields are set
+        if (
+            isset($_POST['fullName' . $i]) &&
+            isset($_POST['email' . $i]) &&
+            isset($_POST['gender' . $i]) &&
+            isset($_POST['dateOfBirth' . $i]) &&
+            isset($_POST['nationality' . $i]) &&
+            isset($_POST['passportId' . $i]) &&
+            isset($_POST['contactNumber' . $i]) &&
+            isset($_POST['emergencyContact' . $i])
+        ) {
+
+            // Assign form values to variables
+            $fullName = $_POST['fullName' . $i];
+            $email = $_POST['email' . $i];
+            $gender = $_POST['gender' . $i];
+            $dateOfBirth = $_POST['dateOfBirth' . $i];
+            $nationality = $_POST['nationality' . $i];
+            $passportId = $_POST['passportId' . $i];
+            $occupation = isset($_POST['occupation' . $i]) ? $_POST['occupation' . $i] : null;
+            $contactNumber = $_POST['contactNumber' . $i];
+            $emergencyContact = $_POST['emergencyContact' . $i];
+            $wheelchairAssistance = isset($_POST['wheelchairAssistance' . $i]) ? 1 : 0;
+            $specialRequests = isset($_POST['specialRequests' . $i]) ? $_POST['specialRequests' . $i] : null;
+
+            // Insert data into the passenger_details table
+            $insertPassengerQuery = "INSERT INTO passenger_details (book_id, full_name, email, gender, date_of_birth, nationality, passport_id, occupation, contact_number, emergency_contact_number, wheelchair_assistance, special_requests)
+                                     VALUES ('$book_id', '$fullName', '$email', '$gender', '$dateOfBirth', '$nationality', '$passportId', '$occupation', '$contactNumber', '$emergencyContact', '$wheelchairAssistance', '$specialRequests')";
+
+            echo $insertPassengerQuery;
+            // Perform the query
+            if (mysqli_query($con, $insertPassengerQuery)) {
+                echo "Passenger $i details inserted successfully<br>";
+            } else {
+                echo "Error inserting passenger $i details: " . mysqli_error($con) . "<br>";
+            }
+        } else {
+            echo "Required fields for passenger $i are not set<br>";
+        }
+    }
+}
 ?>
-
-
 
 
 
@@ -65,24 +104,75 @@ $result->close();
             padding: 20px;
             margin-top: 20px;
         }
+        
+        
+        .card {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 15px 15px 0 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+
+        h4.card-title {
+            color: #007bff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        button {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h2>Flight Booking Form</h2>
-        <form action="process_booking.php" method="post">
 
+        <h2>Flight Booking Form</h2>
+
+    <form action="book2.php" method="post">
+    <input type="hidden" name="bookid" value="<?php echo $book_id; ?>">
+
+        <div class="card">
             <?php
             
+            $sqlFetchTotalHuman = "SELECT total_human FROM book_one WHERE email = '$userEmail' AND book_id = '$book_id'";
+            $result = $con->query($sqlFetchTotalHuman);
 
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $totalHuman = $row['total_human'];
+            } ?>
+                <input type="hidden" name="total_human" value="<?php echo $totalHuman; ?>">
+
+                <?php
             // Loop to generate passenger sections based on total_human
             for ($i = 1; $i <= $totalHuman; $i++) {
             ?>
                 <!-- Passenger Details -->
+                <div class="card-header">
+
+                </div>
+
                 <div class="passenger-section">
                     <h4>Passenger <?php echo $i; ?></h4>
+
+                <div class="card-body">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="fullName<?php echo $i; ?>">Full Name:</label>
@@ -158,6 +248,7 @@ $result->close();
                         <textarea class="form-control" id="specialRequests<?php echo $i; ?>" name="specialRequests<?php echo $i; ?>" rows="3"></textarea>
                     </div>
                 </div>
+                </div>
             <?php
             }
             ?>
@@ -165,8 +256,10 @@ $result->close();
             <!-- Your existing form fields... -->
 
             <button type="submit" class="btn btn-primary">Proceed-></button>
-        </form>
-    </div>
+
+        </div>
+    </form>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -179,3 +272,8 @@ $result->close();
 </body>
 
 </html>
+
+
+<?php
+
+?>

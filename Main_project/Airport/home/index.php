@@ -64,14 +64,14 @@ include "../config/dbcon.php";
         
             <h1 class="display-4">Find Your Next Adventure</h1>
             <p class="lead">Book your flights with ease and convenience.</p>
-            <form action="flight_result2.php" method="get">
+            <form action="flight_result2.php" method="get"  onsubmit="return validateForm()">
                 <div class="form-row align-items-center">
 
 
                     <div class="col-md-4 mb-3">
                         <label for="departure_location">Departure Location:</label>
-                        <select class="form-control" name="departure_location" id="departure_location" required>
-                            <option></option>
+                        <select class="form-control" name="departure_location" id="departure_location" >
+                        <option selected disabled>Select Departure Location</option>
                             <?php
                             $airport_query = "SELECT * FROM airport where `status`=1";
                            
@@ -85,8 +85,8 @@ include "../config/dbcon.php";
 
                     <div class="col-md-4 mb-3">
                         <label for="destinationCity">Destination City</label>
-                        <select class="form-control" name="destination_location" id="destination_location" required>
-                            <option></option>
+                        <select class="form-control" name="destination_location" id="destination_location" >
+                        <option selected disabled>Select Destination Location</option>
                             <?php
                             $airport_query ="SELECT * FROM airport where `status`=1";
                             $airport_result = mysqli_query($con, $airport_query);
@@ -100,7 +100,7 @@ include "../config/dbcon.php";
 
                     <div class="col-md-2 mb-3">
     <label for="departureDate">Departure Date</label>
-    <input type="date" class="form-control" id="departureDate" name="departureDate" required>
+    <input type="date" class="form-control" id="departureDate" name="departureDate" >
 </div>
 
                     <div class="col-md-2 mb-3">
@@ -127,6 +127,19 @@ include("includes/foot.php");
  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     
+    <script>
+    function validateForm() {
+        var departureLocation = document.getElementById('departure_location').value;
+        var destinationLocation = document.getElementById('destination_location').value;
+        var departureDate = document.getElementById('departureDate').value;
 
+        if (departureLocation === "" && destinationLocation === "" && departureDate === "") {
+            alert("Please select at least one of Departure Location, Destination Location, or Departure Date.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </body>
 </html>

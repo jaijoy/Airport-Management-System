@@ -25,17 +25,18 @@ $success_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total = mysqli_real_escape_string($con, $_POST['total']);
-    $numberOfEconomy = mysqli_real_escape_string($con, $_POST['numberOfEconomy_economy']);
-    $economyPrice = mysqli_real_escape_string($con, $_POST['economyPrice']);
+    $numberOfEconomy = floatval(mysqli_real_escape_string($con, $_POST['numberOfEconomy_economy']));
+$economyPrice = floatval(mysqli_real_escape_string($con, $_POST['economyPrice']));
 
-    $numberOfPreEconomy = mysqli_real_escape_string($con, $_POST['numberOfEconomy_pre']);
-    $preEconomyPrice = mysqli_real_escape_string($con, $_POST['preEconomyPrice']);
+$numberOfPreEconomy = floatval(mysqli_real_escape_string($con, $_POST['numberOfEconomy_pre']));
+$preEconomyPrice = floatval(mysqli_real_escape_string($con, $_POST['preEconomyPrice']));
 
-    $numberOfBusiness = mysqli_real_escape_string($con, $_POST['numberOfBusiness']);
-    $businessPrice = mysqli_real_escape_string($con, $_POST['businessPrice']);
+$numberOfBusiness = floatval(mysqli_real_escape_string($con, $_POST['numberOfBusiness']));
+$businessPrice = floatval(mysqli_real_escape_string($con, $_POST['businessPrice']));
 
-    $numberOfFirst = mysqli_real_escape_string($con, $_POST['numberOfFirst']);
-    $firstClassPrice = mysqli_real_escape_string($con, $_POST['firstClassPrice']);
+$numberOfFirst = floatval(mysqli_real_escape_string($con, $_POST['numberOfFirst']));
+$firstClassPrice = floatval(mysqli_real_escape_string($con, $_POST['firstClassPrice']));
+
 
     $flight_id = mysqli_real_escape_string($con, $_GET['flight_id']);
 
@@ -249,54 +250,8 @@ include 'includes/header2.php';
 
         field.style.display = checkbox.checked ? "block" : "none";
     }
-</script>
-<script>
-    function toggleField(checkboxId, fieldId) {
-        var checkbox = document.getElementById(checkboxId);
-        var field = document.getElementById(fieldId);
 
-        field.style.display = checkbox.checked ? "block" : "none";
-    }
-
-    function validateForm() {
-        var preEconomyPrice = parseFloat(document.getElementById("preEconomyPrice").value);
-        var economyPrice = parseFloat(document.getElementById("economyPrice").value);
-        var businessPrice = parseFloat(document.getElementById("businessPrice").value);
-        var firstClassPrice = parseFloat(document.getElementById("firstClassPrice").value);
-
-        var errorContainer = document.getElementById("errorContainer");
-        errorContainer.innerHTML = "";  // Clear previous error messages
-
-        if (isNaN(preEconomyPrice) || isNaN(economyPrice) || isNaN(businessPrice) || isNaN(firstClassPrice)) {
-            showError("Please enter valid numeric values for all prices.");
-            return false;
-        }
-
-        if (preEconomyPrice <= economyPrice) {
-            showError("Premium Economy Class price must be greater than Economy Class price.");
-            return false;
-        }
-
-        if (businessPrice <= economyPrice || businessPrice <= preEconomyPrice) {
-            showError("Business Class price must be greater than Economy Class and Premium Economy Class prices.");
-            return false;
-        }
-
-        if (firstClassPrice <= economyPrice || firstClassPrice <= preEconomyPrice || firstClassPrice <= businessPrice) {
-            showError("First Class price must be greater than Economy Class, Premium Economy Class, and Business Class prices.");
-            return false;
-        }
-
-        return true;
-    }
-
-    function showError(message) {
-        var errorContainer = document.getElementById("errorContainer");
-        var errorMessage = document.createElement("div");
-        errorMessage.style.color = "red";
-        errorMessage.textContent = message;
-        errorContainer.appendChild(errorMessage);
-    }
+    
 </script>
 
 
@@ -307,237 +262,4 @@ include 'includes/header2.php';
 
 
 
-<!-- 
-<script>
-    function toggleField(checkboxId, fieldId) {
-        var checkbox = document.getElementById(checkboxId);
-        var field = document.getElementById(fieldId);
 
-        field.style.display = checkbox.checked ? "block" : "none";
-    }
-
-    function validateForm() {
-        var preEconomyCheckbox = document.getElementById("preEconomyCheckbox");
-        var businessCheckbox = document.getElementById("businessCheckbox");
-        var firstCheckbox = document.getElementById("firstCheckbox");
-
-        var numberOfEconomy = document.getElementById("numberOfEconomy").value;
-        var economyPrice = document.getElementById("economyPrice").value;
-
-        var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-        var preEconomyPrice = document.getElementById("preEconomyPrice").value;
-
-        var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-        var businessPrice = document.getElementById("businessPrice").value;
-
-        var numberOfFirst = document.getElementById("numberOfFirst").value;
-        var firstClassPrice = document.getElementById("firstClassPrice").value;
-
-        var errorContainer = document.getElementById("errorContainer");
-        errorContainer.innerHTML = "";  // Clear previous error messages
-
-        if (preEconomyCheckbox.checked && (numberOfPreEconomy === "" || preEconomyPrice === "")) {
-            showError("Please enter Number of Premium Economy and Premium Economy Class Price Per Seat(INR).");
-            return false;
-        }
-
-        if (businessCheckbox.checked && (numberOfBusiness === "" || businessPrice === "")) {
-            showError("Please enter Number of Business and Business Class Price Per Seat(INR).");
-            return false;
-        }
-
-        if (firstCheckbox.checked && (numberOfFirst === "" || firstClassPrice === "")) {
-            showError("Please enter Number of First Class and First Class Price Per Seat(INR).");
-            return false;
-        }
-
-        
-
-        if (isNaN(preEconomyPrice) || isNaN(economyPrice) || isNaN(businessPrice) || isNaN(firstClassPrice)) {
-            showError("Please enter valid numeric values for all prices.");
-            return false;
-        }
-
-        if (preEconomyPrice <= economyPrice) {
-            showError("Premium Economy Class price must be greater than Economy Class price.");
-            return false;
-        }
-
-        if (businessPrice <= economyPrice || businessPrice <= preEconomyPrice) {
-            showError("Business Class price must be greater than Economy Class and Premium Economy Class prices.");
-            return false;
-        }
-
-        if (firstClassPrice <= economyPrice || firstClassPrice <= preEconomyPrice || firstClassPrice <= businessPrice) {
-            showError("First Class price must be greater than Economy Class, Premium Economy Class, and Business Class prices.");
-            return false;
-        }
-
-
-        return true;
-    }
-
-    function showError(message) {
-        var errorContainer = document.getElementById("errorContainer");
-        var errorMessage = document.createElement("div");
-        errorMessage.style.color = "red";
-        errorMessage.textContent = message;
-        errorContainer.appendChild(errorMessage);
-    }
-</script> -->
-
-
-<script>
-    function toggleField(checkboxId, fieldId) {
-        var checkbox = document.getElementById(checkboxId);
-        var field = document.getElementById(fieldId);
-
-        field.style.display = checkbox.checked ? "block" : "none";
-    }
-
-    function validateForm() {
-        var preEconomyCheckbox = document.getElementById("preEconomyCheckbox");
-        var businessCheckbox = document.getElementById("businessCheckbox");
-        var firstCheckbox = document.getElementById("firstCheckbox");
-
-        var numberOfEconomy = document.getElementById("numberOfEconomy").value;
-        var economyPrice = document.getElementById("economyPrice").value;
-
-        var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-        var preEconomyPrice = document.getElementById("preEconomyPrice").value;
-
-        var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-        var businessPrice = document.getElementById("businessPrice").value;
-
-        var numberOfFirst = document.getElementById("numberOfFirst").value;
-        var firstClassPrice = document.getElementById("firstClassPrice").value;
-
-        var errorContainer = document.getElementById("errorContainer");
-        errorContainer.innerHTML = "";  // Clear previous error messages
-
-        function validatePrice(price, errorMessage) {
-            if (isNaN(price) || price <= 0) {
-                showError(errorMessage);
-                return false;
-            }
-            return true;
-        }
-
-        if (preEconomyCheckbox.checked) {
-            var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-            var preEconomyPrice = parseFloat(document.getElementById("preEconomyPrice").value);
-             var numberOfEconomy = document.getElementById("numberOfEconomy").value;
-        var economyPrice = document.getElementById("economyPrice").value;
-
-        var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-        var preEconomyPrice = document.getElementById("preEconomyPrice").value;
-
-        var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-        var businessPrice = document.getElementById("businessPrice").value;
-
-        var numberOfFirst = document.getElementById("numberOfFirst").value;
-        var firstClassPrice = document.getElementById("firstClassPrice").value;
-
-            if (!validatePrice(preEconomyPrice, "Please enter a valid Premium Economy Class Price Per Seat(INR).")) {
-                return false;
-            }
-
-            if (numberOfPreEconomy === "") {
-                showError("Please enter Number of Premium Economy.");
-                return false;
-            }
-
-             if (preEconomyPrice <= economyPrice) {
-            showError("Premium Economy Class price must be greater than Economy Class price.");
-            return false;
-        }
-
-        
-        if (isNaN(preEconomyPrice) || isNaN(economyPrice) || isNaN(businessPrice) || isNaN(firstClassPrice)) {
-            showError("Please enter valid numeric values for all prices.");
-            return false;
-        }
-
-        }
-
-        if (businessCheckbox.checked) {
-            var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-            var businessPrice = parseFloat(document.getElementById("businessPrice").value);
-             var numberOfEconomy = document.getElementById("numberOfEconomy").value;
-        var economyPrice = document.getElementById("economyPrice").value;
-
-        var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-        var preEconomyPrice = document.getElementById("preEconomyPrice").value;
-
-        var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-        var businessPrice = document.getElementById("businessPrice").value;
-
-        var numberOfFirst = document.getElementById("numberOfFirst").value;
-        var firstClassPrice = document.getElementById("firstClassPrice").value;
-
-            if (!validatePrice(businessPrice, "Please enter a valid Business Class Price Per Seat(INR).")) {
-                return false;
-            }
-
-            if (numberOfBusiness === "") {
-                showError("Please enter Number of Business.");
-                return false;
-            }
-
-             if (businessPrice <= economyPrice || businessPrice <= preEconomyPrice) {
-            showError("Business Class price must be greater than Economy Class and Premium Economy Class prices.");
-            return false;
-        }
-        
-        if (isNaN(preEconomyPrice) || isNaN(economyPrice) || isNaN(businessPrice) || isNaN(firstClassPrice)) {
-            showError("Please enter valid numeric values for all prices.");
-            return false;
-        }
-        }
-
-        if (firstCheckbox.checked) {
-            var numberOfFirst = document.getElementById("numberOfFirst").value;
-            var firstClassPrice = parseFloat(document.getElementById("firstClassPrice").value);
-             var numberOfEconomy = document.getElementById("numberOfEconomy").value;
-        var economyPrice = document.getElementById("economyPrice").value;
-
-        var numberOfPreEconomy = document.getElementById("numberOfPreEconomy").value;
-        var preEconomyPrice = document.getElementById("preEconomyPrice").value;
-
-        var numberOfBusiness = document.getElementById("numberOfBusiness").value;
-        var businessPrice = document.getElementById("businessPrice").value;
-
-        var numberOfFirst = document.getElementById("numberOfFirst").value;
-        var firstClassPrice = document.getElementById("firstClassPrice").value;
-
-            if (!validatePrice(firstClassPrice, "Please enter a valid First Class Price Per Seat(INR).")) {
-                return false;
-            }
-
-            if (numberOfFirst === "") {
-                showError("Please enter Number of First Class.");
-                return false;
-            }
-             if (firstClassPrice <= economyPrice || firstClassPrice <= preEconomyPrice || firstClassPrice <= businessPrice) {
-            showError("First Class price must be greater than Economy Class, Premium Economy Class, and Business Class prices.");
-            return false;
-        }
-        
-        if (isNaN(preEconomyPrice) || isNaN(economyPrice) || isNaN(businessPrice) || isNaN(firstClassPrice)) {
-            showError("Please enter valid numeric values for all prices.");
-            return false;
-        }
-        }
-
-
-        return true;
-    }
-
-    function showError(message) {
-        var errorContainer = document.getElementById("errorContainer");
-        var errorMessage = document.createElement("div");
-        errorMessage.style.color = "red";
-        errorMessage.textContent = message;
-        errorContainer.appendChild(errorMessage);
-    }
-</script>

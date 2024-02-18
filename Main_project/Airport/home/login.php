@@ -1,5 +1,6 @@
 <?php
         include("includes/base.php");
+       
 ?>
 
 <?php
@@ -163,6 +164,16 @@ if (isset($_SESSION['auth'])) {
     <!--header end here-->
 
     <div class="wrapper">
+        <?php
+         if (isset($_GET['flightId'])) {
+                            
+            $flight_Id = $_GET['flightId'];
+            //echo $flight_Id ;
+        }
+        else{
+
+        }
+        ?>
     <div class="sec_msg">
         
         <?php 
@@ -181,7 +192,10 @@ if (isset($_SESSION['auth'])) {
 
         <form action="../functions/rusers.php" method="POST">
             <h1>Login</h1>
+
             <div class="box1">
+    <input type="hidden" name="flightId" value="<?php echo $flight_Id; ?>">
+
                 Email
                 <input type="email" placeholder="" name="email" required>
                 <i class='bx bxs-envelope'></i>

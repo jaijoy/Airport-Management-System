@@ -94,7 +94,8 @@ if(isset($_POST["register_btn"]))
     if (isset($_POST["lbtn"])) {
         $mail = $_POST["email"];
         $provided_password = $_POST["pswd"];
-    
+
+    $flight_Id = $_POST["flightId"];
         // Fetch the hashed password, role, and verify_status from the database
         $sql = "SELECT `username`, `email`, `pass1`, `role`, `verify_status` FROM `users` WHERE `email`='$mail'";
         $result = mysqli_query($con, $sql);
@@ -119,13 +120,28 @@ if(isset($_POST["register_btn"]))
                     ];
     
                     $_SESSION['role'] = $role;
-    
+                     
+
+                    $redirectUrl = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'book1.php';
+
+                    
                     if ($role == 1) {
                         header('Location: ../admin/index.php');
                         exit(0);
-                    } else {
+                    } 
+                    else if(  $redirectUrl){
+                        
+                        unset($_SESSION['redirect_url']); // Clear the redirect URL from session
+                        
+                            header("Location: ../home/$redirectUrl?flightId=$flight_Id");
+                             
+                        
+                        
+                    }
+                    else  {
                         header('Location: ../home/index.php');
                     }
+
                 } else {
                     // Password is incorrect
                     $_SESSION['message'] = 'Invalid credentials';

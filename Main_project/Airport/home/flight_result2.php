@@ -1,8 +1,12 @@
 <?php
-    session_start();
-    
-    
+
+ 
+session_start();
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +76,8 @@
     include "../config/dbcon.php";
 
     // Check if the form is submitted
-    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] == "GET") 
+{
        
         // Retrieve user inputs
         $departure_location = $_GET['departure_location'];
@@ -91,17 +96,17 @@
         s.departure_time, s.arrival_time, s.gate_departure, s.gate_arrival, 
         f.stop, f.price,
         st.total_seat, st.no_economy, st.no_premium, st.no_business, st.no_first
-FROM flight f
-JOIN schedule s ON f.flight_id = s.flight_id
-JOIN seat st ON f.flight_id = st.flight_id
-JOIN airline a ON f.airline_id = a.airline_id
-JOIN airbus ab ON f.airbus_id = ab.airbus_id
-JOIN airport dep_airport ON f.f_departure = dep_airport.airport_id
-JOIN airport arr_airport ON f.f_arrival = arr_airport.airport_id
-WHERE s.day_of_week = '$day_of_week'
-AND f.f_departure = '$departure_location'
-AND f.f_arrival = '$destination_location'
-AND f.status = 1";
+        FROM flight f
+        JOIN schedule s ON f.flight_id = s.flight_id
+        JOIN seat st ON f.flight_id = st.flight_id
+        JOIN airline a ON f.airline_id = a.airline_id
+        JOIN airbus ab ON f.airbus_id = ab.airbus_id
+        JOIN airport dep_airport ON f.f_departure = dep_airport.airport_id
+        JOIN airport arr_airport ON f.f_arrival = arr_airport.airport_id
+        WHERE s.day_of_week = '$day_of_week'
+        OR f.f_departure = '$departure_location'
+        OR f.f_arrival = '$destination_location'
+        AND f.status = 1";
 
 
         $flight_result = mysqli_query($con, $flight_query);
@@ -112,7 +117,8 @@ AND f.status = 1";
         }
 
         // Display the results
-        while ($row = mysqli_fetch_assoc($flight_result)) {
+        while ($row = mysqli_fetch_assoc($flight_result)) 
+        {
             // Display flight information in a card
             echo '<div class="flight-card card">';
             echo '<h4 class="card-title mb-4 text-center"><i class="fas fa-plane flight-icon"></i>' . $row['flight_name'] . '</h4>';
@@ -140,9 +146,13 @@ AND f.status = 1";
             echo '<p class="card-text"><strong>Price:</strong> $' . $row['price'] . '</p>';
 
             // Book Now button
+
             $flightId = $row['flight_id'];
-            echo '<button class="btn btn-book-now mt-3" onclick="bookNow(' . $flightId . ')">Book Now</button>';
-                        
+            
+            //$_SESSION['flightId'] = $flightId;
+
+            echo '<button class="btn btn-book-now mt-3" onclick="bookNow(' . $flightId . ',' . (isset($_SESSION['auth']) ? 'true' : 'false') . ', ' . $flightId . ')">Book Now</button>';
+
             // Seat Details button
             echo '<button class="btn btn-secondary mt-3" onclick="toggleSeatDetails(' . $row['flight_id'] . ')">Seat Details</button>';
             
@@ -157,26 +167,29 @@ AND f.status = 1";
             
             echo '</div>';
         }
+
+      
+    
+        echo '<script>
+    function bookNow(flightId, isLoggedIn) {
+        var seatDetails = document.getElementById("seatDetails_" + flightId);
+        seatDetails.style.display = seatDetails.style.display === "none" ? "block" : "none";
+
+        if (isLoggedIn) {
+            // If logged in, redirect to book1.php with flightId as a parameter
+            window.location.href = "book1.php?flightId=" + flightId;
+        } else {
+            // If not logged in, redirect to login.php with flightId as a parameter
+            window.location.href = "login.php?flightId=" + flightId;
+        }
     }
+</script>';
 
-    echo '<script>
-            function bookNow(flightId) {
-                var seatDetails = document.getElementById("seatDetails_" + flightId);
-                seatDetails.style.display = seatDetails.style.display === "none" ? "block" : "none";
+  
+}
 
-                // Check if the user is logged in
-                var isLoggedIn = ' . (isset($_SESSION['auth']) ? 'true' : 'false') . ';
 
-                if (isLoggedIn) {
-                    // If logged in, redirect to book1.php
-                    window.location.href = "book1.php?flightId=" + flightId;
-                } else {
-                    // If not logged in, redirect to login.php
-                    window.location.href = "login.php";
-                }
-            }
-          </script>';
-    ?>
+?>
 
     <script>
         function toggleSeatDetails(flightId) {
